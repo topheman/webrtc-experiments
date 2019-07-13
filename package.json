@@ -1,0 +1,15 @@
+{
+  "name": "webrtc-experiments",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Christophe Rosset <tophe@topheman.com> (http://labs.topheman.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "1.18.2"
+  }
+}
