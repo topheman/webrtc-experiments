@@ -1,6 +1,4 @@
-function getPeerId() {
-  return location.hash.replace(/^#/, "");
-}
+import { getPeerId } from "./common.js";
 
 function makePeerRemote(masterPeerId) {
   const peer = new Peer();
