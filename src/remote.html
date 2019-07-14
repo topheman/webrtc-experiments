@@ -3,10 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <title>webrtc-experiments</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
 
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/network.css" />
+    <link rel="stylesheet" href="css/remote.css" />
   </head>
 
   <body>
@@ -28,6 +32,11 @@
       </li>
     </ul>
     <h1 class="title">webrtc-experiments</h1>
+    <script src="./vendor/peerjs.min.js"></script>
+    <div class="counter-control">
+      <button type="button" class="counter-control-add">+</button>
+      <button type="button" class="counter-control-sub">-</button>
+    </div>
     <script src="./remote.js" type="module"></script>
   </body>
 </html>

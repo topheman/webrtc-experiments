@@ -15,14 +15,32 @@ function makeQRCode(link, el = document.querySelector(".qrcode")) {
   }, 0);
 }
 
-function init() {
-  const peerId = new Date().getTime();
-  const basePath =
+function makePeerUrl(peerId) {
+  return (
     location.origin +
     location.pathname.replace(/\/$/, "") +
     "/remote.html" +
-    `#${peerId}`;
-  makeQRCode(basePath);
+    `#${peerId}`
+  );
+}
+
+function makePeerMaster() {
+  const peer = new Peer();
+  peer.on("open", peerId => {
+    console.log("Peer object created", { peerId });
+    makeQRCode(makePeerUrl(peerId));
+  });
+  peer.on("connection", conn => {
+    console.log(`Data connection opened with ${conn.peer}`, conn);
+    conn.on("data", data => {
+      console.log("Incomming data", data);
+    });
+  });
+  return peer;
+}
+
+function init() {
+  makePeerMaster();
 }
 
 init();
