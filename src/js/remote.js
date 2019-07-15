@@ -10,13 +10,13 @@ function makePeerRemote(masterPeerId) {
         .querySelector(".counter-control-add")
         .addEventListener("click", e => {
           console.log("ADD");
-          conn.send({ type: "ADD", id: peerId });
+          conn.send({ type: "COUNTER_ADD", id: peerId });
         });
       document
         .querySelector(".counter-control-sub")
         .addEventListener("click", e => {
           console.log("SUB");
-          conn.send({ type: "SUB", id: peerId });
+          conn.send({ type: "COUNTER_SUB", id: peerId });
         });
       console.log(`Data connection opened with ${masterPeerId}`, conn);
     });
