@@ -12,8 +12,8 @@ function makePeerRemote(masterPeerId) {
         .querySelector(".counter-control-add")
         .addEventListener("click", () => {
           if (connOpen) {
-            console.log("COUNTER_ADD");
-            conn.send({ type: "COUNTER_ADD", id: peerId });
+            console.log("COUNTER_INCREMENT");
+            conn.send({ type: "COUNTER_INCREMENT", id: peerId });
           } else {
             console.warn("COUNTER_ADD not sent - connection closed");
           }
@@ -23,7 +23,7 @@ function makePeerRemote(masterPeerId) {
         .addEventListener("click", () => {
           if (connOpen) {
             console.log("SUB");
-            conn.send({ type: "COUNTER_SUB", id: peerId });
+            conn.send({ type: "COUNTER_DECREMENT", id: peerId });
           } else {
             console.warn("COUNTER_SUB not sent - connection closed");
           }
