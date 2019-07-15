@@ -27,7 +27,7 @@ function createStore(initialReducer, initialState = {}, enhancer) {
   };
 }
 
-function reducer(state = 0, action) {
+export function reducer(state = 0, action) {
   switch (action.type) {
     case "ADD":
       return state + 1;

@@ -8,7 +8,7 @@
     "lint:precommit": "echo \"No precommit linting yet\" && exit 0",
     "test:precommit": "npm test",
     "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
-    "test": "echo \"No test specified yet\" && exit 0"
+    "test": "npx jest --runInBand --no-cache --config jest.config.js"
   },
   "lint-staged": {
     "**/*.{tsx,ts,js,jsx,json,css,scss,md}": [
@@ -24,7 +24,9 @@
   "author": "Christophe Rosset <tophe@topheman.com> (http://labs.topheman.com/)",
   "license": "MIT",
   "devDependencies": {
+    "esm": "3.1.0",
     "husky": "^1.3.1",
+    "jest": "^24.8.0",
     "lint-staged": "^8.1.0",
     "prettier": "1.18.2",
     "serve": "^11.1.0"
