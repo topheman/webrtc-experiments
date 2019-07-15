@@ -24,6 +24,16 @@ export function makePeerUrl(peerId) {
   );
 }
 
-export function getPeerId() {
+const MASTER_PEER_ID_LOCAL_STORAGE_KEY = "master-peer-id";
+
+export function getMasterPeerIdFromLocalStorage() {
+  return localStorage.getItem(MASTER_PEER_ID_LOCAL_STORAGE_KEY);
+}
+
+export function setMasterPeerIdToLocalStorage(masterPeerId) {
+  localStorage.setItem(MASTER_PEER_ID_LOCAL_STORAGE_KEY, masterPeerId);
+}
+
+export function getPeerIdFromLacationHash() {
   return location.hash.replace(/^#/, "");
 }

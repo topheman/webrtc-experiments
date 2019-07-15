@@ -1,9 +1,15 @@
-import { makePeerUrl, makeQRCode } from "./common.js";
+import {
+  makePeerUrl,
+  makeQRCode,
+  getMasterPeerIdFromLocalStorage,
+  setMasterPeerIdToLocalStorage
+} from "./common.js";
 import { makeStore } from "./logic.js";
 
 function makePeerMaster(store) {
-  const peer = new Peer();
+  const peer = new Peer(getMasterPeerIdFromLocalStorage());
   peer.on("open", peerId => {
+    setMasterPeerIdToLocalStorage(peerId);
     console.log("Peer object created", { peerId });
     makeQRCode(makePeerUrl(peerId));
   });

@@ -1,4 +1,4 @@
-import { getPeerId } from "./common.js";
+import { getPeerIdFromLacationHash } from "./common.js";
 
 function makePeerRemote(masterPeerId) {
   const peer = new Peer();
@@ -25,7 +25,7 @@ function makePeerRemote(masterPeerId) {
 }
 
 function init() {
-  makePeerRemote(getPeerId());
+  makePeerRemote(getPeerIdFromLacationHash());
 }
 
 init();
