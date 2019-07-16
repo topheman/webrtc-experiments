@@ -15,17 +15,17 @@ function makePeerRemote(masterPeerId) {
             console.log("COUNTER_INCREMENT");
             conn.send({ type: "COUNTER_INCREMENT", id: peerId });
           } else {
-            console.warn("COUNTER_ADD not sent - connection closed");
+            console.warn("COUNTER_INCREMENT not sent - connection closed");
           }
         });
       document
         .querySelector(".counter-control-sub")
         .addEventListener("click", () => {
           if (connOpen) {
-            console.log("SUB");
+            console.log("COUNTER_DECREMENT");
             conn.send({ type: "COUNTER_DECREMENT", id: peerId });
           } else {
-            console.warn("COUNTER_SUB not sent - connection closed");
+            console.warn("COUNTER_DECREMENT not sent - connection closed");
           }
         });
       console.log(`Data connection opened with ${masterPeerId}`, conn);
