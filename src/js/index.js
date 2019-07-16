@@ -13,8 +13,8 @@ function makePeerMaster(store) {
   window.addEventListener("beforeunload", () => {
     console.log("disconnecting", connections);
     connections.forEach(conn => {
-      console.log(`Sending "DISCONNECT" to ${conn.peer}`);
-      conn.send({ type: "DISCONNECT" });
+      console.log(`Sending "MASTER_DISCONNECT" to ${conn.peer}`);
+      conn.send({ type: "MASTER_DISCONNECT" });
     });
   });
   peer.on("open", peerId => {
@@ -24,6 +24,7 @@ function makePeerMaster(store) {
   });
   peer.on("connection", conn => {
     connections.push(conn);
+    store.dispatch({ peerId: conn.peer, type: "REMOTE_CONNECT" });
     console.log(`Data connection opened with ${conn.peer}`, conn);
     conn.on("data", data => {
       store.dispatch({ peerId: conn.peer, ...data });

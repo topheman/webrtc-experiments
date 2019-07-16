@@ -9,7 +9,7 @@ export function getRemoteFromState(state, peerId) {
   );
 }
 
-export function makeRemoteCounterState(state, peerId, num) {
+export function makeRemoteCounterState(state, peerId, num, connect = false) {
   const currentRemote = getRemoteFromState(state, peerId);
   if (currentRemote) {
     return {
@@ -18,7 +18,7 @@ export function makeRemoteCounterState(state, peerId, num) {
         ...state.remotes.filter(remote => remote.peerId !== peerId),
         {
           ...currentRemote,
-          counter: currentRemote.counter + num
+          counter: connect ? 0 : currentRemote.counter + num
         }
       ]
     };
@@ -32,6 +32,13 @@ export function reducer(state = { remotes: [] }, action) {
       return makeRemoteCounterState(state, action.peerId, 1);
     case "COUNTER_DECREMENT":
       return makeRemoteCounterState(state, action.peerId, -1);
+    case "REMOTE_CONNECT":
+      return makeRemoteCounterState(state, action.peerId, 0);
+    case "REMOTE_DISCONNECT":
+      return {
+        ...state,
+        remotes: state.remotes.filter(remote => remote.peerId !== action.peerId)
+      };
     default:
       return state;
   }

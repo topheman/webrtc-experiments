@@ -8,8 +8,8 @@ function makePeerRemote(masterPeerId) {
     const conn = peer.connect(masterPeerId);
     // send a disconnect message to master when reloading/closing
     window.addEventListener("beforeunload", () => {
-      console.log(`Sending "DISCONNECT" to ${conn.peer}`);
-      conn.send({ type: "DISCONNECT" });
+      console.log(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
+      conn.send({ type: "REMOTE_DISCONNECT" });
     });
     conn.on("open", () => {
       connOpen = true;
@@ -37,7 +37,7 @@ function makePeerRemote(masterPeerId) {
     });
     conn.on("data", data => {
       console.log("Incomming data", data);
-      if (data && data.type === "DISCONNECT") {
+      if (data && data.type === "MASTER_DISCONNECT") {
         connOpen = false;
       }
     });
