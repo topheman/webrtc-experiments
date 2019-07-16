@@ -26,9 +26,7 @@ function makePeerMaster(store) {
     connections.push(conn);
     console.log(`Data connection opened with ${conn.peer}`, conn);
     conn.on("data", data => {
-      console.log("Incomming data", data);
-      store.dispatch(data);
-      console.log("counter", store.getState());
+      store.dispatch({ peerId: conn.peer, ...data });
     });
   });
   peer.on("error", error => console.error(error));

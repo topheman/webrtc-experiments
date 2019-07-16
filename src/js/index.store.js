@@ -1,21 +1,21 @@
 import { createStore } from "./redux-lite.js";
 
-export function getRemoteFromState(state, remoteId) {
+export function getRemoteFromState(state, peerId) {
   return (
-    state.remotes.find(remote => remote.id === remoteId) || {
-      id: remoteId,
+    state.remotes.find(remote => remote.peerId === peerId) || {
+      peerId,
       counter: 0
     }
   );
 }
 
-export function makeRemoteCounterState(state, remoteId, num) {
-  const currentRemote = getRemoteFromState(state, remoteId);
+export function makeRemoteCounterState(state, peerId, num) {
+  const currentRemote = getRemoteFromState(state, peerId);
   if (currentRemote) {
     return {
       ...state,
       remotes: [
-        ...state.remotes.filter(remote => remote.id !== remoteId),
+        ...state.remotes.filter(remote => remote.peerId !== peerId),
         {
           ...currentRemote,
           counter: currentRemote.counter + num
@@ -29,9 +29,9 @@ export function makeRemoteCounterState(state, remoteId, num) {
 export function reducer(state = { remotes: [] }, action) {
   switch (action.type) {
     case "COUNTER_INCREMENT":
-      return makeRemoteCounterState(state, action.id, 1);
+      return makeRemoteCounterState(state, action.peerId, 1);
     case "COUNTER_DECREMENT":
-      return makeRemoteCounterState(state, action.id, -1);
+      return makeRemoteCounterState(state, action.peerId, -1);
     default:
       return state;
   }

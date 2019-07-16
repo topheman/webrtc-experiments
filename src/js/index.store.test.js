@@ -1,34 +1,34 @@
 import { reducer, makeRemoteCounterState } from "./index.store";
 
 describe("index.store.reducer", () => {
-  it("Create a new slice of state from remoteId", () => {
+  it("Create a new slice of state from peerId", () => {
     const initialState = { remotes: [] };
     expect(makeRemoteCounterState(initialState, "foo", 1)).toEqual({
-      remotes: [{ id: "foo", counter: 1 }]
+      remotes: [{ peerId: "foo", counter: 1 }]
     });
   });
-  it("reducer should create remote if not exist and execute counter", () => {
+  it("reducer should create remote if peerId does not exist and execute counter", () => {
     const initialState = { remotes: [] };
     expect(
-      reducer(initialState, { id: "foo", type: "COUNTER_INCREMENT" })
+      reducer(initialState, { peerId: "foo", type: "COUNTER_INCREMENT" })
     ).toEqual({
-      remotes: [{ id: "foo", counter: 1 }]
+      remotes: [{ peerId: "foo", counter: 1 }]
     });
   });
-  it("reducer should reuse remote if not exist and execute counter", () => {
-    const initialState = { remotes: [{ id: "foo", counter: 1 }] };
+  it("reducer should reuse remote if peerId exists and execute counter", () => {
+    const initialState = { remotes: [{ peerId: "foo", counter: 1 }] };
     expect(
-      reducer(initialState, { id: "foo", type: "COUNTER_INCREMENT" })
+      reducer(initialState, { peerId: "foo", type: "COUNTER_INCREMENT" })
     ).toEqual({
-      remotes: [{ id: "foo", counter: 2 }]
+      remotes: [{ peerId: "foo", counter: 2 }]
     });
   });
   it("reducer should also decrement", () => {
-    const initialState = { remotes: [{ id: "foo", counter: 1 }] };
+    const initialState = { remotes: [{ peerId: "foo", counter: 1 }] };
     expect(
-      reducer(initialState, { id: "foo", type: "COUNTER_DECREMENT" })
+      reducer(initialState, { peerId: "foo", type: "COUNTER_DECREMENT" })
     ).toEqual({
-      remotes: [{ id: "foo", counter: 0 }]
+      remotes: [{ peerId: "foo", counter: 0 }]
     });
   });
 });

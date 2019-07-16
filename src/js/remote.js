@@ -13,7 +13,7 @@ function makePeerRemote(masterPeerId) {
         .addEventListener("click", () => {
           if (connOpen) {
             console.log("COUNTER_INCREMENT");
-            conn.send({ type: "COUNTER_INCREMENT", id: peerId });
+            conn.send({ type: "COUNTER_INCREMENT" });
           } else {
             console.warn("COUNTER_INCREMENT not sent - connection closed");
           }
@@ -23,7 +23,7 @@ function makePeerRemote(masterPeerId) {
         .addEventListener("click", () => {
           if (connOpen) {
             console.log("COUNTER_DECREMENT");
-            conn.send({ type: "COUNTER_DECREMENT", id: peerId });
+            conn.send({ type: "COUNTER_DECREMENT" });
           } else {
             console.warn("COUNTER_DECREMENT not sent - connection closed");
           }
