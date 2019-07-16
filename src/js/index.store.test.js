@@ -1,4 +1,4 @@
-import { reducer } from "./logic";
+import { reducer } from "./index.store";
 
 describe("logic.reducer", () => {
   it("default state - COUNTER_INCREMENT action should resolve to 1", () => {

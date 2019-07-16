@@ -4,7 +4,7 @@ import {
   getMasterPeerIdFromLocalStorage,
   setMasterPeerIdToLocalStorage
 } from "./common.js";
-import { makeStore } from "./logic.js";
+import { makeStore } from "./index.store.js";
 
 function makePeerMaster(store) {
   const peer = new Peer(getMasterPeerIdFromLocalStorage());

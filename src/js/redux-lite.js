@@ -1,5 +1,7 @@
-/** from https://dev.to/selbekk/redux-in-27-lines-2i92 */
-function createStore(initialReducer, initialState = {}, enhancer) {
+/**
+ * from https://dev.to/selbekk/redux-in-27-lines-2i92
+ */
+export function createStore(initialReducer, initialState = {}, enhancer) {
   if (enhancer) {
     return enhancer(createStore)(initialReducer, initialState);
   }
@@ -25,19 +27,4 @@ function createStore(initialReducer, initialState = {}, enhancer) {
       this.dispatch({ type: "__REPLACE__" });
     }
   };
-}
-
-export function reducer(state = 0, action) {
-  switch (action.type) {
-    case "COUNTER_INCREMENT":
-      return state + 1;
-    case "COUNTER_DECREMENT":
-      return state - 1;
-    default:
-      return state;
-  }
-}
-
-export function makeStore() {
-  return createStore(reducer, 0);
 }
