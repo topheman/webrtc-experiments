@@ -6,6 +6,11 @@ function makePeerRemote(masterPeerId) {
   peer.on("open", peerId => {
     console.log("Peer object created", { peerId });
     const conn = peer.connect(masterPeerId);
+    // send a disconnect message to master when reloading/closing
+    window.addEventListener("beforeunload", () => {
+      console.log(`Sending "DISCONNECT" to ${conn.peer}`);
+      conn.send({ type: "DISCONNECT" });
+    });
     conn.on("open", () => {
       connOpen = true;
       document
