@@ -1,6 +1,18 @@
 import { makeStore } from "./remote.store.js";
 import { getPeerIdFromLacationHash } from "./common.js";
 
+function makeButtonClickCallback(store, conn, actionType) {
+  return function(e) {
+    e.preventDefault();
+    if (store.getState().masterConnected) {
+      console.log(actionType);
+      conn.send({ type: actionType });
+    } else {
+      console.warn(`${actionType} not sent - connection closed`);
+    }
+  };
+}
+
 function makePeerRemote(masterPeerId, store) {
   const peer = new Peer();
   peer.on("open", peerId => {
@@ -15,24 +27,18 @@ function makePeerRemote(masterPeerId, store) {
       store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
       document
         .querySelector(".counter-control-add")
-        .addEventListener("click", () => {
-          if (store.getState().masterConnected) {
-            console.log("COUNTER_INCREMENT");
-            conn.send({ type: "COUNTER_INCREMENT" });
-          } else {
-            console.warn("COUNTER_INCREMENT not sent - connection closed");
-          }
-        });
+        .addEventListener(
+          "click",
+          makeButtonClickCallback(store, conn, "COUNTER_INCREMENT"),
+          false
+        );
       document
         .querySelector(".counter-control-sub")
-        .addEventListener("click", () => {
-          if (store.getState().masterConnected) {
-            console.log("COUNTER_DECREMENT");
-            conn.send({ type: "COUNTER_DECREMENT" });
-          } else {
-            console.warn("COUNTER_DECREMENT not sent - connection closed");
-          }
-        });
+        .addEventListener(
+          "click",
+          makeButtonClickCallback(store, conn, "COUNTER_DECREMENT"),
+          false
+        );
       console.log(`Data connection opened with ${masterPeerId}`, conn);
     });
     conn.on("data", data => {
