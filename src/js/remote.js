@@ -64,14 +64,20 @@ function makePeerRemote(masterPeerId, store) {
   peer.on("open", peerId => {
     console.log("Peer object created", { peerId });
     makePeerConnection(peer, masterPeerId, store);
-    // conn.on("close") and conn.on("error") won't catch closing connection
-    // tracking by sending a message just before the peer page unloads (covers reload/closing)
-    store.subscribe(state => {
-      if (state.masterConnected === false) {
-        console.warn("connection to master closed, trying to reconnect ...");
-        store.dispatch({ type: "REMOTE_RECONNECT" });
-      }
-    });
+  });
+  // conn.on("close") and conn.on("error") won't catch closing connection
+  // tracking by sending a message just before the peer page unloads (covers reload/closing)
+  store.subscribe(state => {
+    if (
+      state.masterConnected === false &&
+      state.lastReconnectAttempt === false
+    ) {
+      console.warn("connection to master closed, trying to reconnect ...");
+      store.dispatch({ type: "REMOTE_RECONNECT", currentTime: new Date() });
+      setTimeout(() => {
+        makePeerConnection(peer, masterPeerId, store);
+      }, 0);
+    }
   });
   peer.on("error", error => console.error(error));
   peer.on("disconnected", e => console.log("disconnected", e));

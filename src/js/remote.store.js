@@ -10,7 +10,13 @@ export function reducer(state = { masterConnected: false }, action) {
     case "MASTER_DISCONNECT":
       return {
         ...state,
+        lastReconnectAttempt: false,
         masterConnected: false
+      };
+    case "REMOTE_RECONNECT":
+      return {
+        ...state,
+        lastReconnectAttempt: action.currentTime
       };
     default:
       return state;

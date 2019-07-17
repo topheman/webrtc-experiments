@@ -15,7 +15,22 @@ describe("remote.store.reducer", () => {
         { type: "MASTER_DISCONNECT" }
       )
     ).toEqual({
-      masterConnected: false
+      masterConnected: false,
+      lastReconnectAttempt: false
+    });
+  });
+  it("state should update lastReconnectAttempt on REMOTE_RECONNECT", () => {
+    const currentTime = new Date();
+    expect(
+      reducer(
+        {
+          masterConnected: false
+        },
+        { type: "REMOTE_RECONNECT", currentTime }
+      )
+    ).toEqual({
+      masterConnected: false,
+      lastReconnectAttempt: currentTime
     });
   });
 });
