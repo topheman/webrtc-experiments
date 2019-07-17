@@ -1,8 +1,8 @@
+import { makeStore } from "./remote.store.js";
 import { getPeerIdFromLacationHash } from "./common.js";
 
-function makePeerRemote(masterPeerId) {
+function makePeerRemote(masterPeerId, store) {
   const peer = new Peer();
-  let connOpen = false;
   peer.on("open", peerId => {
     console.log("Peer object created", { peerId });
     const conn = peer.connect(masterPeerId);
@@ -12,11 +12,11 @@ function makePeerRemote(masterPeerId) {
       conn.send({ type: "REMOTE_DISCONNECT" });
     });
     conn.on("open", () => {
-      connOpen = true;
+      store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
       document
         .querySelector(".counter-control-add")
         .addEventListener("click", () => {
-          if (connOpen) {
+          if (store.getState().masterConnected) {
             console.log("COUNTER_INCREMENT");
             conn.send({ type: "COUNTER_INCREMENT" });
           } else {
@@ -26,7 +26,7 @@ function makePeerRemote(masterPeerId) {
       document
         .querySelector(".counter-control-sub")
         .addEventListener("click", () => {
-          if (connOpen) {
+          if (store.getState().masterConnected) {
             console.log("COUNTER_DECREMENT");
             conn.send({ type: "COUNTER_DECREMENT" });
           } else {
@@ -36,10 +36,7 @@ function makePeerRemote(masterPeerId) {
       console.log(`Data connection opened with ${masterPeerId}`, conn);
     });
     conn.on("data", data => {
-      console.log("Incomming data", data);
-      if (data && data.type === "MASTER_DISCONNECT") {
-        connOpen = false;
-      }
+      store.dispatch({ peerId: conn.peer, ...data });
     });
   });
   peer.on("error", error => console.error(error));
@@ -48,7 +45,8 @@ function makePeerRemote(masterPeerId) {
 }
 
 function init() {
-  makePeerRemote(getPeerIdFromLacationHash());
+  const store = makeStore();
+  makePeerRemote(getPeerIdFromLacationHash(), store);
 }
 
 init();

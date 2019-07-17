@@ -9,7 +9,7 @@
     "lint:precommit": "echo \"No precommit linting yet\" && exit 0",
     "test:precommit": "npm test",
     "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
-    "test": "npx jest --runInBand --no-cache --config jest.config.js"
+    "test": "npx jest --no-cache --config jest.config.js"
   },
   "lint-staged": {
     "**/*.{tsx,ts,js,jsx,json,css,scss,md}": [
