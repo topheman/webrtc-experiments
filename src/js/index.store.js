@@ -54,11 +54,24 @@ export function reducer(state = { remotes: [] }, action) {
         };
       }
       return state;
+    case "SIGNAL_OPEN":
+      if (!action.peerId) {
+        throw new Error("Missing peerId argument");
+      }
+      return {
+        ...state,
+        peerId: action.peerId
+      };
+    case "SIGNAL_CLOSE":
+      return {
+        ...state,
+        peerId: false
+      };
     default:
       return state;
   }
 }
 
 export function makeStore() {
-  return createStore(reducer, { remotes: [] });
+  return createStore(reducer, { remotes: [], peerId: false });
 }

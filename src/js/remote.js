@@ -93,6 +93,7 @@ function makePeerRemote(masterPeerId, store) {
   const peer = new Peer();
   peer.on("open", peerId => {
     console.log("Peer object created", { peerId });
+    store.dispatch({ type: "SIGNAL_OPEN" });
     makePeerConnection(peer, masterPeerId, store);
   });
   // conn.on("close") and conn.on("error") won't catch closing connection
@@ -110,7 +111,10 @@ function makePeerRemote(masterPeerId, store) {
     }
   });
   peer.on("error", error => console.error(error));
-  peer.on("disconnected", e => console.log("disconnected", e));
+  peer.on("disconnected", e => {
+    console.log("disconnected", e);
+    store.dispatch({ type: "SIGNAL_CLOSE" });
+  });
   return peer;
 }
 

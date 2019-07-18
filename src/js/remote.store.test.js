@@ -41,4 +41,20 @@ describe("remote.store.reducer", () => {
       )
     ).toEqual({ masterConnected: true, name: "foo" });
   });
+  it("should track peerId on SIGNAL_OPEN", () => {
+    const initialState = { masterConnected: false };
+    expect(
+      reducer(initialState, { type: "SIGNAL_OPEN", peerId: "foo" })
+    ).toEqual({
+      masterConnected: false,
+      peerId: "foo"
+    });
+  });
+  it("should remove peerId on SIGNAL_CLOSE", () => {
+    const initialState = { masterConnected: false };
+    expect(reducer(initialState, { type: "SIGNAL_CLOSE" })).toEqual({
+      masterConnected: false,
+      peerId: false
+    });
+  });
 });

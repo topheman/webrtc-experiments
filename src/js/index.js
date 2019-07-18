@@ -20,6 +20,7 @@ function makePeerMaster(store) {
   peer.on("open", peerId => {
     setMasterPeerIdToLocalStorage(peerId);
     console.log("Peer object created", { peerId });
+    store.dispatch({ type: "SIGNAL_OPEN" });
     makeQRCode(makePeerUrl(peerId));
   });
   peer.on("connection", conn => {
@@ -31,7 +32,10 @@ function makePeerMaster(store) {
     });
   });
   peer.on("error", error => console.error(error));
-  peer.on("disconnected", e => console.log("disconnected", e));
+  peer.on("disconnected", e => {
+    console.log("disconnected", e);
+    store.dispatch({ type: "SIGNAL_CLOSE" });
+  });
   return peer;
 }
 
