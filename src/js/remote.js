@@ -13,29 +13,46 @@ function makeButtonClickCallback(store, conn, actionType) {
   };
 }
 
-function setupButtons(store, conn) {
-  const incrementCallback = makeButtonClickCallback(
-    store,
-    conn,
-    "COUNTER_INCREMENT"
-  );
+function makeFormSubmitCallback(store, conn) {
+  return function(e) {
+    e.preventDefault();
+    if (store.getState().masterConnected) {
+      const action = {
+        type: "REMOTE_SET_NAME",
+        name: e.target.querySelector("input").value
+      };
+      store.dispatch(action);
+      conn.send(action);
+    } else {
+      console.warn(`REMOTE_SET_NAME not sent - connection closed`);
+    }
+    // todo save name to localStorage
+  };
+}
+
+let incrementCallback, decrementCallback, formSubitCallback;
+function setupUI(store, conn) {
   document
     .querySelector(".counter-control-add")
     .removeEventListener("click", incrementCallback);
+  incrementCallback = makeButtonClickCallback(store, conn, "COUNTER_INCREMENT");
   document
     .querySelector(".counter-control-add")
     .addEventListener("click", incrementCallback, false);
-  const decrementCallback = makeButtonClickCallback(
-    store,
-    conn,
-    "COUNTER_DECREMENT"
-  );
   document
     .querySelector(".counter-control-sub")
     .removeEventListener("click", decrementCallback);
+  decrementCallback = makeButtonClickCallback(store, conn, "COUNTER_DECREMENT");
   document
     .querySelector(".counter-control-sub")
     .addEventListener("click", decrementCallback, false);
+  document
+    .querySelector(".form-set-name")
+    .removeEventListener("submit", formSubitCallback, false);
+  formSubitCallback = makeFormSubmitCallback(store, conn);
+  document
+    .querySelector(".form-set-name")
+    .addEventListener("submit", formSubitCallback, false);
 }
 
 function makePeerConnection(peer, masterPeerId, store) {
@@ -50,8 +67,9 @@ function makePeerConnection(peer, masterPeerId, store) {
   window.addEventListener("beforeunload", onBeforeUnload);
   conn.on("open", () => {
     store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
+    // todo send SET_NAME if already set
     console.log(`Data connection opened with ${masterPeerId}`, conn);
-    setupButtons(store, conn);
+    setupUI(store, conn);
   });
   conn.on("data", data => {
     store.dispatch({ peerId: conn.peer, ...data });
@@ -85,6 +103,7 @@ function makePeerRemote(masterPeerId, store) {
 }
 
 function init() {
+  // todo retrieve name from localStorage
   const store = makeStore();
   makePeerRemote(getPeerIdFromLacationHash(), store);
 }

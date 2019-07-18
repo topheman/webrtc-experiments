@@ -33,4 +33,12 @@ describe("remote.store.reducer", () => {
       lastReconnectAttempt: currentTime
     });
   });
+  it("state should update name on REMOTE_SET_NAME", () => {
+    expect(
+      reducer(
+        { masterConnected: true },
+        { type: "REMOTE_SET_NAME", name: "foo" }
+      )
+    ).toEqual({ masterConnected: true, name: "foo" });
+  });
 });

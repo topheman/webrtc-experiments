@@ -18,6 +18,12 @@ export function reducer(state = { masterConnected: false }, action) {
         ...state,
         lastReconnectAttempt: action.currentTime
       };
+    case "REMOTE_SET_NAME": {
+      return {
+        ...state,
+        name: action.name
+      };
+    }
     default:
       return state;
   }

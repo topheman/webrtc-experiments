@@ -39,6 +39,21 @@ export function reducer(state = { remotes: [] }, action) {
         ...state,
         remotes: state.remotes.filter(remote => remote.peerId !== action.peerId)
       };
+    case "REMOTE_SET_NAME":
+      const currentRemote = getRemoteFromState(state, action.peerId);
+      if (currentRemote) {
+        return {
+          ...state,
+          remotes: [
+            ...state.remotes.filter(remote => remote.peerId !== action.peerId),
+            {
+              ...currentRemote,
+              name: action.name
+            }
+          ]
+        };
+      }
+      return state;
     default:
       return state;
   }

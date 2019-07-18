@@ -57,4 +57,21 @@ describe("index.store.reducer", () => {
       remotes: [{ peerId: "foo", counter: 1 }, { peerId: "bar", counter: 1 }]
     });
   });
+  it("reducer should name specific remote on REMOTE_SET_NAME", () => {
+    const initialState = {
+      remotes: [{ peerId: "foo", counter: 0 }, { peerId: "bar", counter: 0 }]
+    };
+    expect(
+      reducer(initialState, {
+        peerId: "bar",
+        type: "REMOTE_SET_NAME",
+        name: "Hello World!"
+      })
+    ).toEqual({
+      remotes: [
+        { peerId: "foo", counter: 0 },
+        { peerId: "bar", counter: 0, name: "Hello World!" }
+      ]
+    });
+  });
 });
