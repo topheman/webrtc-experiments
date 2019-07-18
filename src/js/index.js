@@ -1,10 +1,9 @@
 import {
-  makePeerUrl,
-  makeQRCode,
   getMasterPeerIdFromLocalStorage,
   setMasterPeerIdToLocalStorage
 } from "./common.js";
 import { makeStore } from "./index.store.js";
+import { initView } from "./index.container.js";
 
 function makePeerMaster(store) {
   const peer = new Peer(getMasterPeerIdFromLocalStorage());
@@ -20,8 +19,7 @@ function makePeerMaster(store) {
   peer.on("open", peerId => {
     setMasterPeerIdToLocalStorage(peerId);
     console.log("Peer object created", { peerId });
-    store.dispatch({ type: "SIGNAL_OPEN" });
-    makeQRCode(makePeerUrl(peerId));
+    store.dispatch({ type: "SIGNAL_OPEN", peerId });
   });
   peer.on("connection", conn => {
     connections.push(conn);
@@ -41,6 +39,7 @@ function makePeerMaster(store) {
 
 function init() {
   const store = makeStore();
+  initView(store);
   makePeerMaster(store);
 }
 

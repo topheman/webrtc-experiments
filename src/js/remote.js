@@ -93,7 +93,7 @@ function makePeerRemote(masterPeerId, store) {
   const peer = new Peer();
   peer.on("open", peerId => {
     console.log("Peer object created", { peerId });
-    store.dispatch({ type: "SIGNAL_OPEN" });
+    store.dispatch({ type: "SIGNAL_OPEN", peerId });
     makePeerConnection(peer, masterPeerId, store);
   });
   // conn.on("close") and conn.on("error") won't catch closing connection
