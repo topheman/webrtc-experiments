@@ -1,5 +1,9 @@
 import { makeStore } from "./remote.store.js";
-import { getPeerIdFromLacationHash } from "./common.js";
+import {
+  getPeerIdFromLacationHash,
+  getRemoteNameFromLocalStorage,
+  setRemoteNameToLocalStorage
+} from "./common.js";
 
 function makeButtonClickCallback(store, conn, actionType) {
   return function(e) {
@@ -26,7 +30,7 @@ function makeFormSubmitCallback(store, conn) {
     } else {
       console.warn(`REMOTE_SET_NAME not sent - connection closed`);
     }
-    // todo save name to localStorage
+    setRemoteNameToLocalStorage(e.target.querySelector("input").value);
   };
 }
 
@@ -53,6 +57,9 @@ function setupUI(store, conn) {
   document
     .querySelector(".form-set-name")
     .addEventListener("submit", formSubitCallback, false);
+  document.querySelector(
+    ".form-set-name input"
+  ).value = getRemoteNameFromLocalStorage();
 }
 
 function makePeerConnection(peer, masterPeerId, store) {
@@ -67,7 +74,12 @@ function makePeerConnection(peer, masterPeerId, store) {
   window.addEventListener("beforeunload", onBeforeUnload);
   conn.on("open", () => {
     store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
-    // todo send SET_NAME if already set
+    if (getRemoteNameFromLocalStorage()) {
+      conn.send({
+        type: "REMOTE_SET_NAME",
+        name: getRemoteNameFromLocalStorage()
+      });
+    }
     console.log(`Data connection opened with ${masterPeerId}`, conn);
     setupUI(store, conn);
   });
@@ -103,7 +115,6 @@ function makePeerRemote(masterPeerId, store) {
 }
 
 function init() {
-  // todo retrieve name from localStorage
   const store = makeStore();
   makePeerRemote(getPeerIdFromLacationHash(), store);
 }

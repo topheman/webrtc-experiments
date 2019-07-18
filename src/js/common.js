@@ -37,3 +37,13 @@ export function setMasterPeerIdToLocalStorage(masterPeerId) {
 export function getPeerIdFromLacationHash() {
   return location.hash.replace(/^#/, "");
 }
+
+const REMOTE_NAME_LOCAL_STORAGE_KEY = "remote-name";
+
+export function getRemoteNameFromLocalStorage() {
+  return localStorage.getItem(REMOTE_NAME_LOCAL_STORAGE_KEY);
+}
+
+export function setRemoteNameToLocalStorage(remoteName) {
+  localStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
+}
