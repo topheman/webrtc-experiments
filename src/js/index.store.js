@@ -1,4 +1,5 @@
 import { createStore } from "./redux-lite.js";
+import { commonReducer } from "./common.js";
 
 export function getRemoteFromMainState(state, peerId) {
   return (
@@ -59,19 +60,6 @@ export function mainReducer(state = { remotes: [] }, action) {
         };
       }
       return state;
-    case "SIGNAL_OPEN":
-      if (!action.peerId) {
-        throw new Error("Missing peerId argument");
-      }
-      return {
-        ...state,
-        peerId: action.peerId
-      };
-    case "SIGNAL_CLOSE":
-      return {
-        ...state,
-        peerId: false
-      };
     default:
       return state;
   }
@@ -79,10 +67,14 @@ export function mainReducer(state = { remotes: [] }, action) {
 
 function rootReducer(state = {}, action) {
   return {
-    main: mainReducer(state.main, action)
+    main: mainReducer(state.main, action),
+    common: commonReducer(state.common, action)
   };
 }
 
 export function makeStore() {
-  return createStore(rootReducer, { main: { remotes: [], peerId: false } });
+  return createStore(rootReducer, {
+    main: { remotes: [] },
+    common: { peerId: false }
+  });
 }

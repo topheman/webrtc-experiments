@@ -74,20 +74,4 @@ describe("index.store.mainReducer", () => {
       ]
     });
   });
-  it("should track peerId on SIGNAL_OPEN", () => {
-    const initialState = { remotes: [] };
-    expect(
-      mainReducer(initialState, { type: "SIGNAL_OPEN", peerId: "foo" })
-    ).toEqual({
-      remotes: [],
-      peerId: "foo"
-    });
-  });
-  it("should remove peerId on SIGNAL_CLOSE", () => {
-    const initialState = { remotes: [] };
-    expect(mainReducer(initialState, { type: "SIGNAL_CLOSE" })).toEqual({
-      remotes: [],
-      peerId: false
-    });
-  });
 });
