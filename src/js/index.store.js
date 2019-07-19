@@ -1,6 +1,6 @@
 import { createStore } from "./redux-lite.js";
 
-export function getRemoteFromState(state, peerId) {
+export function getRemoteFromMainState(state, peerId) {
   return (
     state.remotes.find(remote => remote.peerId === peerId) || {
       peerId,
@@ -9,8 +9,13 @@ export function getRemoteFromState(state, peerId) {
   );
 }
 
-export function makeRemoteCounterState(state, peerId, num, connect = false) {
-  const currentRemote = getRemoteFromState(state, peerId);
+export function makeRemoteCounterMainState(
+  state,
+  peerId,
+  num,
+  connect = false
+) {
+  const currentRemote = getRemoteFromMainState(state, peerId);
   if (currentRemote) {
     return {
       ...state,
@@ -26,21 +31,21 @@ export function makeRemoteCounterState(state, peerId, num, connect = false) {
   return state;
 }
 
-export function reducer(state = { remotes: [] }, action) {
+export function mainReducer(state = { remotes: [] }, action) {
   switch (action.type) {
     case "COUNTER_INCREMENT":
-      return makeRemoteCounterState(state, action.peerId, 1);
+      return makeRemoteCounterMainState(state, action.peerId, 1);
     case "COUNTER_DECREMENT":
-      return makeRemoteCounterState(state, action.peerId, -1);
+      return makeRemoteCounterMainState(state, action.peerId, -1);
     case "REMOTE_CONNECT":
-      return makeRemoteCounterState(state, action.peerId, 0);
+      return makeRemoteCounterMainState(state, action.peerId, 0);
     case "REMOTE_DISCONNECT":
       return {
         ...state,
         remotes: state.remotes.filter(remote => remote.peerId !== action.peerId)
       };
     case "REMOTE_SET_NAME":
-      const currentRemote = getRemoteFromState(state, action.peerId);
+      const currentRemote = getRemoteFromMainState(state, action.peerId);
       if (currentRemote) {
         return {
           ...state,
@@ -72,6 +77,12 @@ export function reducer(state = { remotes: [] }, action) {
   }
 }
 
+function rootReducer(state = {}, action) {
+  return {
+    main: mainReducer(state.main, action)
+  };
+}
+
 export function makeStore() {
-  return createStore(reducer, { remotes: [], peerId: false });
+  return createStore(rootReducer, { main: { remotes: [], peerId: false } });
 }

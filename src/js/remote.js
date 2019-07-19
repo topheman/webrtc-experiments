@@ -8,7 +8,7 @@ import {
 function makeButtonClickCallback(store, conn, actionType) {
   return function(e) {
     e.preventDefault();
-    if (store.getState().masterConnected) {
+    if (store.getState().main.masterConnected) {
       console.log(actionType);
       conn.send({ type: actionType });
     } else {
@@ -20,7 +20,7 @@ function makeButtonClickCallback(store, conn, actionType) {
 function makeFormSubmitCallback(store, conn) {
   return function(e) {
     e.preventDefault();
-    if (store.getState().masterConnected) {
+    if (store.getState().main.masterConnected) {
       const action = {
         type: "REMOTE_SET_NAME",
         name: e.target.querySelector("input").value
@@ -100,8 +100,8 @@ function makePeerRemote(masterPeerId, store) {
   // tracking by sending a message just before the peer page unloads (covers reload/closing)
   store.subscribe(state => {
     if (
-      state.masterConnected === false &&
-      state.lastReconnectAttempt === false
+      state.main.masterConnected === false &&
+      state.main.lastReconnectAttempt === false
     ) {
       console.warn("connection to master closed, trying to reconnect ...");
       store.dispatch({ type: "REMOTE_RECONNECT", currentTime: new Date() });

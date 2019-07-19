@@ -1,14 +1,14 @@
-import { reducer } from "./remote.store";
+import { mainReducer } from "./remote.store";
 
-describe("remote.store.reducer", () => {
+describe("remote.store.mainReducer", () => {
   it("state should turn to masterConnected === true on MASTER_CONNECT", () => {
-    expect(reducer(undefined, { type: "MASTER_CONNECT" })).toEqual({
+    expect(mainReducer(undefined, { type: "MASTER_CONNECT" })).toEqual({
       masterConnected: true
     });
   });
   it("state should turn to masterConnected === false on MASTER_DISCONNECT", () => {
     expect(
-      reducer(
+      mainReducer(
         {
           masterConnected: true
         },
@@ -22,7 +22,7 @@ describe("remote.store.reducer", () => {
   it("state should update lastReconnectAttempt on REMOTE_RECONNECT", () => {
     const currentTime = new Date();
     expect(
-      reducer(
+      mainReducer(
         {
           masterConnected: false
         },
@@ -35,7 +35,7 @@ describe("remote.store.reducer", () => {
   });
   it("state should update name on REMOTE_SET_NAME", () => {
     expect(
-      reducer(
+      mainReducer(
         { masterConnected: true },
         { type: "REMOTE_SET_NAME", name: "foo" }
       )
@@ -44,7 +44,7 @@ describe("remote.store.reducer", () => {
   it("should track peerId on SIGNAL_OPEN", () => {
     const initialState = { masterConnected: false };
     expect(
-      reducer(initialState, { type: "SIGNAL_OPEN", peerId: "foo" })
+      mainReducer(initialState, { type: "SIGNAL_OPEN", peerId: "foo" })
     ).toEqual({
       masterConnected: false,
       peerId: "foo"
@@ -52,7 +52,7 @@ describe("remote.store.reducer", () => {
   });
   it("should remove peerId on SIGNAL_CLOSE", () => {
     const initialState = { masterConnected: false };
-    expect(reducer(initialState, { type: "SIGNAL_CLOSE" })).toEqual({
+    expect(mainReducer(initialState, { type: "SIGNAL_CLOSE" })).toEqual({
       masterConnected: false,
       peerId: false
     });

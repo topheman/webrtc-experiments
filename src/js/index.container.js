@@ -4,14 +4,14 @@ export function initView(store) {
   const content = document.getElementById("content");
   let currentState;
   store.subscribe(() => {
-    let previousState = currentState || {};
+    let previousState = currentState || { main: {} };
     currentState = store.getState();
     if (
-      currentState.peerId !== false &&
-      currentState.peerId !== previousState.peerId
+      currentState.main.peerId !== false &&
+      currentState.main.peerId !== previousState.main.peerId
     ) {
       content.innerHTML = `<div class="qrcode"></div>`;
-      makeQRCode(makePeerUrl(currentState.peerId));
+      makeQRCode(makePeerUrl(currentState.main.peerId));
     }
   });
 }
