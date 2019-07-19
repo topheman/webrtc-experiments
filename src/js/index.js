@@ -3,7 +3,7 @@ import {
   setMasterPeerIdToLocalStorage
 } from "./common.js";
 import { makeStore } from "./index.store.js";
-import { initView } from "./index.container.js";
+import { createView } from "./index.container.js";
 
 function makePeerMaster(store) {
   const peer = new Peer(getMasterPeerIdFromLocalStorage());
@@ -39,7 +39,15 @@ function makePeerMaster(store) {
 
 function init() {
   const store = makeStore();
-  initView(store);
+  // create view based on <template> tag content
+  const content = document.importNode(
+    document.querySelector("template").content,
+    true
+  );
+  createView(content, store);
+  document.querySelector("#content").innerHTML = "";
+  document.querySelector("#content").appendChild(content);
+  // create peerjs controller
   makePeerMaster(store);
 }
 

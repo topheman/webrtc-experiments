@@ -1,4 +1,5 @@
 export function makeQRCode(link, el = document.querySelector(".qrcode")) {
+  el.innerHTML = "";
   new QRCode(el, {
     text: link,
     width: 160,
