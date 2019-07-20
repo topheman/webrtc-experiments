@@ -1,0 +1,86 @@
+class RemotesList extends HTMLElement {
+  constructor() {
+    super();
+    const shadow = this.attachShadow({ mode: "open" });
+    const style = document.createElement("style");
+    const div = document.createElement("div");
+    style.textContent = `
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+.remote-peerId {
+  font-size: 80%;
+}
+.remote-counter {
+  color: #900000;
+  font-weight: bold;
+  font-size: 120%;
+}
+    `;
+    shadow.appendChild(style);
+    shadow.appendChild(div);
+    this.render();
+  }
+
+  static get observedAttributes() {
+    return ["data"];
+  }
+
+  /**
+   * Accept a `data` attribute with a serialized object
+   * `data` attribute is not kept in sync with `data` property
+   * for performance reasons (to avoid large object serialization)
+   */
+
+  attributeChangedCallback(attrName, oldVal, newVal) {
+    if (oldVal !== newVal) {
+      if (attrName === "data") {
+        try {
+          const data = JSON.parse(newVal);
+          this._data = data;
+        } catch (e) {
+          console.error(
+            "Failed to parse `data` attribute in `remotes-list` element",
+            e
+          );
+        }
+      }
+      this.render();
+    }
+  }
+
+  get data() {
+    return this._data;
+  }
+  set data(newVal) {
+    this._data = newVal;
+    this.render();
+  }
+
+  render() {
+    let content;
+    if (!this._data) {
+      content = "<p>No connected remotes</p>";
+    } else {
+      const div = document.createElement("div"); // used for remote.name sanitizing
+      content = `<p>${this._data.length} connected remote${
+        this._data.length > 1 ? "s" : ""
+      }:</p><ul>${this.data
+        .map(remote => {
+          if (remote.name) {
+            div.textContent = remote.name;
+          }
+          return `<li><span class="remote-peerId">${
+            remote.peerId
+          }</span> counter: <span class="remote-counter">${
+            remote.counter
+          }</span>${remote.name ? ` ${div.innerHTML}` : ""}</li>`;
+        })
+        .join("")}</ul>`;
+    }
+    this.shadowRoot.querySelector("div").innerHTML = content;
+  }
+}
+
+customElements.define("remotes-list", RemotesList);

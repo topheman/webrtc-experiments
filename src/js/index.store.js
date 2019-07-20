@@ -10,6 +10,10 @@ export function getRemoteFromMainState(state, peerId) {
   );
 }
 
+export function getGlobalCounterFromMainState(state) {
+  return state.remotes.reduce((acc, cur) => acc + cur.counter, 0);
+}
+
 export function makeRemoteCounterMainState(
   state,
   peerId,
