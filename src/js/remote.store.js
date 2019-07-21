@@ -40,6 +40,6 @@ function rootReducer(state = {}, action) {
 export function makeStore() {
   return createStore(rootReducer, {
     main: { masterConnected: false },
-    common: { peerId: null }
+    common: { peerId: null, signalErrors: [] }
   });
 }

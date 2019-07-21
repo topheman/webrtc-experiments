@@ -79,6 +79,6 @@ function rootReducer(state = {}, action) {
 export function makeStore() {
   return createStore(rootReducer, {
     main: { remotes: [] },
-    common: { peerId: null }
+    common: { peerId: null, signalErrors: [] }
   });
 }

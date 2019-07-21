@@ -31,15 +31,35 @@ export function setRemoteNameToLocalStorage(remoteName) {
   localStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
 }
 
+export function humanizeErrors(errors = []) {
+  const transform = [
+    [
+      /ID ".*" is taken/,
+      "You may have the main page opened on an other tab, please close it"
+    ]
+  ];
+  return errors.reduce((errorsList, currentError) => {
+    const humanizedCurrentError = transform.reduce(
+      (acc, [regExp, replaceError]) => {
+        acc = currentError.replace(regExp, replaceError);
+        return acc;
+      },
+      currentError
+    );
+    errorsList.push(humanizedCurrentError);
+    return errorsList;
+  }, []);
+}
+
 export function commonReducer(
-  state = { peerId: null, signalError: null },
+  state = { peerId: null, signalErrors: [] },
   action
 ) {
   switch (action.type) {
     case "SIGNAL_ERROR":
       return {
         ...state,
-        signalError: action.error
+        signalErrors: [...state.signalErrors, action.error]
       };
     case "SIGNAL_OPEN":
       if (!action.peerId) {
@@ -47,7 +67,7 @@ export function commonReducer(
       }
       return {
         ...state,
-        signalError: null,
+        signalErrors: [],
         peerId: action.peerId
       };
     case "SIGNAL_CLOSE":
