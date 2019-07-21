@@ -1,9 +1,9 @@
 import { commonReducer } from "./common";
 
 describe("common.commonReducer", () => {
-  it("default state should be peerId: false", () => {
+  it("default state should be peerId: null", () => {
     expect(commonReducer(undefined, { type: "ANYTHING!!!" })).toEqual({
-      peerId: false
+      peerId: null
     });
   });
   it("should track peerId on SIGNAL_CLOSE", () => {
@@ -15,9 +15,9 @@ describe("common.commonReducer", () => {
     });
   });
   it("should remove peerId on SIGNAL_CLOSE", () => {
-    const initialState = { peerId: true };
+    const initialState = { peerId: "foo" };
     expect(commonReducer(initialState, { type: "SIGNAL_CLOSE" })).toEqual({
-      peerId: false
+      peerId: null
     });
   });
   it("should throw if SIGNAL_OPEN is passed without peerId", () => {

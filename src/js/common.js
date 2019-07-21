@@ -31,7 +31,7 @@ export function setRemoteNameToLocalStorage(remoteName) {
   localStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
 }
 
-export function commonReducer(state = { peerId: false }, action) {
+export function commonReducer(state = { peerId: null }, action) {
   switch (action.type) {
     case "SIGNAL_OPEN":
       if (!action.peerId) {
@@ -44,7 +44,7 @@ export function commonReducer(state = { peerId: false }, action) {
     case "SIGNAL_CLOSE":
       return {
         ...state,
-        peerId: false
+        peerId: null
       };
     default:
       return state;
