@@ -3,7 +3,18 @@ import { getGlobalCounterFromMainState } from "./index.store.js";
 import "./components/remotes-list.js";
 import "./components/qrcode-display.js";
 
-export function createView(content, store) {
+export function createView(templateNode, store) {
+  const content = document.createElement("div");
+  content.appendChild(templateNode);
+  content.addEventListener(
+    "click",
+    e => {
+      if (e.target.classList.contains("open-remote")) {
+        window.open(makePeerUrl(store.getState().common.peerId));
+      }
+    },
+    false
+  );
   const loader = content.querySelector(".initial-loading");
   const remotesList = content.querySelector("remotes-list");
   const globalCounter = content.querySelector(".global-counter");
@@ -16,7 +27,5 @@ export function createView(content, store) {
     remotesList.data = state.main.remotes;
     globalCounter.textContent = getGlobalCounterFromMainState(state.main);
   });
-  return {
-    content
-  };
+  return content;
 }

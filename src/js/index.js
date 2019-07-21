@@ -40,11 +40,11 @@ function makePeerMaster(store) {
 function init() {
   const store = makeStore();
   // create view based on <template> tag content
-  const content = document.importNode(
+  const templateNode = document.importNode(
     document.querySelector("template").content,
     true
   );
-  createView(content, store);
+  const content = createView(templateNode, store);
   document.querySelector("#content").innerHTML = "";
   document.querySelector("#content").appendChild(content);
   // create peerjs controller
