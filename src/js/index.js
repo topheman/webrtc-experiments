@@ -29,7 +29,10 @@ function makePeerMaster(store) {
       store.dispatch({ peerId: conn.peer, ...data });
     });
   });
-  peer.on("error", error => console.error(error));
+  peer.on("error", error => {
+    console.error(error);
+    store.dispatch({ type: "SIGNAL_ERROR", error: error.message });
+  });
   peer.on("disconnected", e => {
     console.log("disconnected", e);
     store.dispatch({ type: "SIGNAL_CLOSE" });

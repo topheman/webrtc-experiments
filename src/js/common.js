@@ -31,14 +31,23 @@ export function setRemoteNameToLocalStorage(remoteName) {
   localStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
 }
 
-export function commonReducer(state = { peerId: null }, action) {
+export function commonReducer(
+  state = { peerId: null, signalError: null },
+  action
+) {
   switch (action.type) {
+    case "SIGNAL_ERROR":
+      return {
+        ...state,
+        signalError: action.error
+      };
     case "SIGNAL_OPEN":
       if (!action.peerId) {
         throw new Error("Missing peerId argument");
       }
       return {
         ...state,
+        signalError: null,
         peerId: action.peerId
       };
     case "SIGNAL_CLOSE":

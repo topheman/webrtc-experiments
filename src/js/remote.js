@@ -110,7 +110,10 @@ function makePeerRemote(masterPeerId, store) {
       }, 0);
     }
   });
-  peer.on("error", error => console.error(error));
+  peer.on("error", error => {
+    console.error(error);
+    store.dispatch({ type: "SIGNAL_ERROR", error: error.message });
+  });
   peer.on("disconnected", e => {
     console.log("disconnected", e);
     store.dispatch({ type: "SIGNAL_CLOSE" });
