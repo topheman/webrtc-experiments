@@ -79,3 +79,48 @@ export function commonReducer(
       return state;
   }
 }
+
+/**
+ * Middleware that redispatch every action as type: "LOG"
+ * Also console.log the action / state
+ */
+export const loggerMiddleware = store => next => action => {
+  next(action);
+  if (action.type !== "LOG") {
+    store.dispatch({ type: "LOG", level: "log", payload: action });
+  } else {
+    console[action.level || "log"](action.payload, store.getState());
+  }
+};
+
+/**
+ * Reducer that tracks the "LOG" actions
+ */
+export function makeLogsReducer(bufferSize) {
+  return (state = [], action = {}) => {
+    switch (action.type) {
+      case "LOG":
+        return state.concat(action).slice(-bufferSize);
+      default:
+        return state;
+    }
+  };
+}
+
+/**
+ * Logger factory that will let you add entries into the store
+ */
+export const makeLogger = store => ({
+  info(msg) {
+    store.dispatch({ type: "LOG", level: "info", payload: msg });
+  },
+  log(msg) {
+    store.dispatch({ type: "LOG", level: "log", payload: msg });
+  },
+  warn(msg) {
+    store.dispatch({ type: "LOG", level: "warn", payload: msg });
+  },
+  error(msg) {
+    store.dispatch({ type: "LOG", level: "error", payload: msg });
+  }
+});

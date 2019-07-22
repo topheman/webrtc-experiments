@@ -1,4 +1,4 @@
-import { commonReducer, humanizeErrors } from "./common";
+import { commonReducer, humanizeErrors, makeLogsReducer } from "./common";
 
 describe("common.commonReducer", () => {
   it("default state should be peerId: null, signalError: null", () => {
@@ -60,6 +60,50 @@ describe("common.humanizeErrors", () => {
       "foo",
       "You may have this main page opened on an other tab, please close it",
       "bar"
+    ]);
+  });
+});
+describe("common.makeLogsReducer", () => {
+  it("should append payload on undefined state", () => {
+    const logsReducer = makeLogsReducer(3);
+    expect(
+      logsReducer(undefined, { type: "LOG", payload: "foo", level: "log" })
+    ).toEqual([{ type: "LOG", payload: "foo", level: "log" }]);
+  });
+  it("should append payload on empty array", () => {
+    const logsReducer = makeLogsReducer(3);
+    expect(
+      logsReducer([], { type: "LOG", payload: "foo", level: "log" })
+    ).toEqual([{ type: "LOG", payload: "foo", level: "log" }]);
+  });
+  it("should append payload on filled array", () => {
+    const logsReducer = makeLogsReducer(3);
+    expect(
+      logsReducer([{ type: "LOG", payload: "bar", level: "log" }], {
+        type: "LOG",
+        payload: "foo",
+        level: "log"
+      })
+    ).toEqual([
+      { type: "LOG", payload: "bar", level: "log" },
+      { type: "LOG", payload: "foo", level: "log" }
+    ]);
+  });
+  it("should append payload on filled array and stop at buffer size", () => {
+    const logsReducer = makeLogsReducer(3);
+    expect(
+      logsReducer(
+        [
+          { type: "LOG", payload: "toto", level: "log" },
+          { type: "LOG", payload: "tata", level: "log" },
+          { type: "LOG", payload: "titi", level: "log" }
+        ],
+        { type: "LOG", payload: "tutu", level: "log" }
+      )
+    ).toEqual([
+      { type: "LOG", payload: "tata", level: "log" },
+      { type: "LOG", payload: "titi", level: "log" },
+      { type: "LOG", payload: "tutu", level: "log" }
     ]);
   });
 });

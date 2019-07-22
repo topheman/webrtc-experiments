@@ -1,5 +1,5 @@
-import { createStore } from "./redux-lite.js";
-import { commonReducer } from "./common.js";
+import { createStore, applyMiddleware, compose } from "./redux-lite.js";
+import { commonReducer, makeLogsReducer, loggerMiddleware } from "./common.js";
 
 export function mainReducer(state = { masterConnected: false }, action) {
   switch (action.type) {
@@ -30,16 +30,24 @@ export function mainReducer(state = { masterConnected: false }, action) {
   }
 }
 
-function rootReducer(state = {}, action) {
+const makeRootReducer = () => (state = {}, action) => {
+  const logsReducer = makeLogsReducer(20);
   return {
     main: mainReducer(state.main, action),
-    common: commonReducer(state.common, action)
+    common: commonReducer(state.common, action),
+    logs: logsReducer(state.logs, action)
   };
-}
+};
 
 export function makeStore() {
-  return createStore(rootReducer, {
-    main: { masterConnected: false },
-    common: { peerId: null, signalErrors: [] }
-  });
+  const customMiddlewares = [loggerMiddleware];
+  const middlewares = applyMiddleware(...customMiddlewares);
+  return createStore(
+    makeRootReducer(),
+    {
+      main: { masterConnected: false },
+      common: { peerId: null, signalErrors: [] }
+    },
+    compose(middlewares)
+  );
 }

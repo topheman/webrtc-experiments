@@ -1,30 +1,31 @@
 import {
   getMasterPeerIdFromLocalStorage,
-  setMasterPeerIdToLocalStorage
+  setMasterPeerIdToLocalStorage,
+  makeLogger
 } from "./common.js";
 import { makeStore } from "./index.store.js";
 import { createView } from "./index.container.js";
 
-function makePeerMaster(store) {
+function makePeerMaster(store, logger) {
   const peer = new Peer(getMasterPeerIdFromLocalStorage());
   const connections = [];
   // send a disconnect message to all clients when reloading/closing
   window.addEventListener("beforeunload", () => {
     console.log("disconnecting", connections);
     connections.forEach(conn => {
-      console.log(`Sending "MASTER_DISCONNECT" to ${conn.peer}`);
+      logger.info(`Sending "MASTER_DISCONNECT" to ${conn.peer}`);
       conn.send({ type: "MASTER_DISCONNECT" });
     });
   });
   peer.on("open", peerId => {
     setMasterPeerIdToLocalStorage(peerId);
-    console.log("Peer object created", { peerId });
+    logger.info(`Peer object created, ${JSON.stringify({ peerId })}`);
     store.dispatch({ type: "SIGNAL_OPEN", peerId });
   });
   peer.on("connection", conn => {
     connections.push(conn);
     store.dispatch({ peerId: conn.peer, type: "REMOTE_CONNECT" });
-    console.log(`Data connection opened with ${conn.peer}`, conn);
+    logger.info(`Data connection opened with ${conn.peer}`);
     conn.on("data", data => {
       store.dispatch({ peerId: conn.peer, ...data });
     });
@@ -42,6 +43,7 @@ function makePeerMaster(store) {
 
 function init() {
   const store = makeStore();
+  const logger = makeLogger(store);
   // create view based on <template> tag content
   const templateNode = document.importNode(
     document.querySelector("template").content,
@@ -51,7 +53,7 @@ function init() {
   document.querySelector("#content").innerHTML = "";
   document.querySelector("#content").appendChild(content);
   // create peerjs controller
-  makePeerMaster(store);
+  makePeerMaster(store, logger);
 }
 
 init();

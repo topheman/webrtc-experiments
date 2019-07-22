@@ -2,14 +2,15 @@ import { makeStore } from "./remote.store.js";
 import {
   getPeerIdFromLacationHash,
   getRemoteNameFromLocalStorage,
-  setRemoteNameToLocalStorage
+  setRemoteNameToLocalStorage,
+  makeLogger
 } from "./common.js";
 
-function makeButtonClickCallback(store, conn, actionType) {
+function makeButtonClickCallback(store, conn, actionType, logger) {
   return function(e) {
     e.preventDefault();
     if (store.getState().main.masterConnected) {
-      console.log(actionType);
+      logger.log(actionType);
       conn.send({ type: actionType });
     } else {
       console.warn(`${actionType} not sent - connection closed`);
@@ -17,7 +18,7 @@ function makeButtonClickCallback(store, conn, actionType) {
   };
 }
 
-function makeFormSubmitCallback(store, conn) {
+function makeFormSubmitCallback(store, conn, logger) {
   return function(e) {
     e.preventDefault();
     if (store.getState().main.masterConnected) {
@@ -28,32 +29,42 @@ function makeFormSubmitCallback(store, conn) {
       store.dispatch(action);
       conn.send(action);
     } else {
-      console.warn(`REMOTE_SET_NAME not sent - connection closed`);
+      logger.warn(`REMOTE_SET_NAME not sent - connection closed`);
     }
     setRemoteNameToLocalStorage(e.target.querySelector("input").value);
   };
 }
 
 let incrementCallback, decrementCallback, formSubitCallback;
-function setupUI(store, conn) {
+function setupUI(store, conn, logger) {
   document
     .querySelector(".counter-control-add")
     .removeEventListener("click", incrementCallback);
-  incrementCallback = makeButtonClickCallback(store, conn, "COUNTER_INCREMENT");
+  incrementCallback = makeButtonClickCallback(
+    store,
+    conn,
+    "COUNTER_INCREMENT",
+    logger
+  );
   document
     .querySelector(".counter-control-add")
     .addEventListener("click", incrementCallback, false);
   document
     .querySelector(".counter-control-sub")
     .removeEventListener("click", decrementCallback);
-  decrementCallback = makeButtonClickCallback(store, conn, "COUNTER_DECREMENT");
+  decrementCallback = makeButtonClickCallback(
+    store,
+    conn,
+    "COUNTER_DECREMENT",
+    logger
+  );
   document
     .querySelector(".counter-control-sub")
     .addEventListener("click", decrementCallback, false);
   document
     .querySelector(".form-set-name")
     .removeEventListener("submit", formSubitCallback, false);
-  formSubitCallback = makeFormSubmitCallback(store, conn);
+  formSubitCallback = makeFormSubmitCallback(store, conn, logger);
   document
     .querySelector(".form-set-name")
     .addEventListener("submit", formSubitCallback, false);
@@ -62,11 +73,11 @@ function setupUI(store, conn) {
   ).value = getRemoteNameFromLocalStorage();
 }
 
-function makePeerConnection(peer, masterPeerId, store) {
+function makePeerConnection(peer, masterPeerId, store, logger) {
   const conn = peer.connect(masterPeerId);
   // send a disconnect message to master when reloading/closing
   const onBeforeUnload = () => {
-    console.log(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
+    logger.info(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
     conn.send({ type: "REMOTE_DISCONNECT" });
   };
   // make sure to remove a previous added event to prevent double trigger
@@ -80,8 +91,8 @@ function makePeerConnection(peer, masterPeerId, store) {
         name: getRemoteNameFromLocalStorage()
       });
     }
-    console.log(`Data connection opened with ${masterPeerId}`, conn);
-    setupUI(store, conn);
+    logger.info(`Data connection opened with ${masterPeerId}`, conn);
+    setupUI(store, conn, logger);
   });
   conn.on("data", data => {
     store.dispatch({ peerId: conn.peer, ...data });
@@ -89,12 +100,12 @@ function makePeerConnection(peer, masterPeerId, store) {
   return conn;
 }
 
-function makePeerRemote(masterPeerId, store) {
+function makePeerRemote(masterPeerId, store, logger) {
   const peer = new Peer();
   peer.on("open", peerId => {
-    console.log("Peer object created", { peerId });
+    logger.info(`Peer object created, ${JSON.stringify({ peerId })}`);
     store.dispatch({ type: "SIGNAL_OPEN", peerId });
-    makePeerConnection(peer, masterPeerId, store);
+    makePeerConnection(peer, masterPeerId, store, logger);
   });
   // conn.on("close") and conn.on("error") won't catch closing connection
   // tracking by sending a message just before the peer page unloads (covers reload/closing)
@@ -103,10 +114,10 @@ function makePeerRemote(masterPeerId, store) {
       state.main.masterConnected === false &&
       state.main.lastReconnectAttempt === false
     ) {
-      console.warn("connection to master closed, trying to reconnect ...");
       store.dispatch({ type: "REMOTE_RECONNECT", currentTime: new Date() });
       setTimeout(() => {
-        makePeerConnection(peer, masterPeerId, store);
+        logger.warn("connection to master closed, trying to reconnect ...");
+        makePeerConnection(peer, masterPeerId, store, logger);
       }, 0);
     }
   });
@@ -123,7 +134,8 @@ function makePeerRemote(masterPeerId, store) {
 
 function init() {
   const store = makeStore();
-  makePeerRemote(getPeerIdFromLacationHash(), store);
+  const logger = makeLogger(store);
+  makePeerRemote(getPeerIdFromLacationHash(), store, logger);
 }
 
 init();

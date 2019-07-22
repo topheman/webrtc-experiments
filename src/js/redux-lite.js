@@ -14,7 +14,6 @@ export function createStore(initialReducer, initialState = {}, enhancer) {
     },
     dispatch(action) {
       state = reducer(state, action);
-      console.log(action, state);
       subscribers.forEach(subscriber => subscriber(state));
     },
     subscribe(listener) {
