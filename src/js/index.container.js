@@ -37,7 +37,11 @@ export function createView(templateNode, store) {
     } else {
       alert.classList.add("hide");
     }
-    qrcodeDisplay.setAttribute("data", makePeerUrl(state.common.peerId));
+    if (state.common.peerId) {
+      qrcodeDisplay.setAttribute("data", makePeerUrl(state.common.peerId));
+    } else {
+      qrcodeDisplay.removeAttribute("data");
+    }
     remotesList.data = state.main.remotes;
     globalCounter.textContent = getGlobalCounterFromMainState(state.main);
   });
