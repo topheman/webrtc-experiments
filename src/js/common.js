@@ -35,7 +35,7 @@ export function humanizeErrors(errors = []) {
   const transform = [
     [
       /ID ".*" is taken/,
-      "You may have the main page opened on an other tab, please close it"
+      "You may have this main page opened on an other tab, please close it"
     ]
   ];
   return errors.reduce((errorsList, currentError) => {

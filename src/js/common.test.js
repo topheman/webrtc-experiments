@@ -58,7 +58,7 @@ describe("common.humanizeErrors", () => {
   it("should transform known errors", () => {
     expect(humanizeErrors(["foo", `ID "foo" is taken`, "bar"])).toEqual([
       "foo",
-      "You may have the main page opened on an other tab, please close it",
+      "You may have this main page opened on an other tab, please close it",
       "bar"
     ]);
   });
