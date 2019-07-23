@@ -3,3 +3,14 @@
   font-weight: bold;
   font-size: 120%;
 }
+qrcode-display {
+  text-align: center;
+}
+button.open-remote {
+  width: 160px;
+  height: 25px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+}

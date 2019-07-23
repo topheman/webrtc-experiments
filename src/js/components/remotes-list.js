@@ -9,6 +9,10 @@ ul {
   list-style: none;
   padding-left: 0;
 }
+li::before {
+  padding-left: 5px;
+  content: "📱";
+}
 .remote-peerId {
   font-size: 80%;
 }
