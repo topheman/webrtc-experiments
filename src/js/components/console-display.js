@@ -8,9 +8,18 @@ class ConsoleDisplay extends HTMLElement {
 ul {
   list-style: none;
   padding-left: 0;
+  width: 100%;
+  overflow-x: scroll;
 }
 li {
-  padding-left: 10px;
+  padding-left: 5px;
+  white-space: nowrap;
+}
+li:nth-child(odd) {
+  background: lightgray;
+}
+li.warn {
+  background: lightyellow;
 }
 li.info::before {
   content: "ℹ️"

@@ -41,7 +41,7 @@ export function createView(templateNode, store) {
     errorsDisplay.data = state.common.signalErrors;
     remotesList.data = state.main.remotes;
     globalCounter.textContent = getGlobalCounterFromMainState(state.main);
-    consoleDisplay.data = state.logs;
+    consoleDisplay.data = [...state.logs].reverse();
   });
   return content;
 }
