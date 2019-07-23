@@ -20,7 +20,7 @@ function makePeerMaster(store, logger) {
   peer.on("open", peerId => {
     setMasterPeerIdToLocalStorage(peerId);
     logger.info(`Peer object created, ${JSON.stringify({ peerId })}`);
-    store.dispatch({ type: "SIGNAL_OPEN", peerId });
+    store.dispatch({ peerId, type: "SIGNAL_OPEN" });
   });
   peer.on("connection", conn => {
     connections.push(conn);

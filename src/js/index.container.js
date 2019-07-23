@@ -3,6 +3,7 @@ import { getGlobalCounterFromMainState } from "./index.store.js";
 import "./components/remotes-list.js";
 import "./components/qrcode-display.js";
 import "./components/errors-display.js";
+import "./components/console-display.js";
 
 export function createView(templateNode, store) {
   const content = document.createElement("div");
@@ -22,6 +23,7 @@ export function createView(templateNode, store) {
   const globalCounter = content.querySelector(".global-counter");
   const qrcodeDisplay = content.querySelector("qrcode-display");
   const buttonOpenRemote = content.querySelector(".open-remote");
+  const consoleDisplay = content.querySelector("console-display");
   store.subscribe(state => {
     if (state.common.peerId || state.common.signalErrors.length > 0) {
       loader.classList.add("hide");
@@ -39,6 +41,7 @@ export function createView(templateNode, store) {
     errorsDisplay.data = state.common.signalErrors;
     remotesList.data = state.main.remotes;
     globalCounter.textContent = getGlobalCounterFromMainState(state.main);
+    consoleDisplay.data = state.logs;
   });
   return content;
 }
