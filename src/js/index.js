@@ -49,7 +49,8 @@ function init() {
     document.querySelector("template").content,
     true
   );
-  const content = createView(templateNode, store);
+  const staticContent = document.querySelector(".static-content");
+  const content = createView(templateNode, staticContent, store);
   document.querySelector("#content").innerHTML = "";
   document.querySelector("#content").appendChild(content);
   // create peerjs controller

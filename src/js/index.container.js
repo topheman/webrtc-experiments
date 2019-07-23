@@ -5,9 +5,10 @@ import "./components/qrcode-display.js";
 import "./components/errors-display.js";
 import "./components/console-display.js";
 
-export function createView(templateNode, store) {
+export function createView(templateNode, staticContent, store) {
   const content = document.createElement("div");
   content.appendChild(templateNode);
+  content.querySelector(".static-content-wrapper").appendChild(staticContent);
   content.addEventListener(
     "click",
     e => {
