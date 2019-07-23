@@ -68,25 +68,25 @@ describe("common.makeLogsReducer", () => {
     const logsReducer = makeLogsReducer(3);
     expect(
       logsReducer(undefined, { type: "LOG", payload: "foo", level: "log" })
-    ).toEqual([{ type: "LOG", payload: "foo", level: "log" }]);
+    ).toEqual([{ type: "LOG", payload: "foo", level: "log", key: 1 }]);
   });
   it("should append payload on empty array", () => {
     const logsReducer = makeLogsReducer(3);
     expect(
       logsReducer([], { type: "LOG", payload: "foo", level: "log" })
-    ).toEqual([{ type: "LOG", payload: "foo", level: "log" }]);
+    ).toEqual([{ type: "LOG", payload: "foo", level: "log", key: 1 }]);
   });
   it("should append payload on filled array", () => {
     const logsReducer = makeLogsReducer(3);
     expect(
-      logsReducer([{ type: "LOG", payload: "bar", level: "log" }], {
+      logsReducer([{ type: "LOG", payload: "bar", level: "log", key: 1 }], {
         type: "LOG",
         payload: "foo",
         level: "log"
       })
     ).toEqual([
-      { type: "LOG", payload: "bar", level: "log" },
-      { type: "LOG", payload: "foo", level: "log" }
+      { type: "LOG", payload: "bar", level: "log", key: 1 },
+      { type: "LOG", payload: "foo", level: "log", key: 2 }
     ]);
   });
   it("should append payload on filled array and stop at buffer size", () => {
@@ -94,16 +94,16 @@ describe("common.makeLogsReducer", () => {
     expect(
       logsReducer(
         [
-          { type: "LOG", payload: "toto", level: "log" },
-          { type: "LOG", payload: "tata", level: "log" },
-          { type: "LOG", payload: "titi", level: "log" }
+          { type: "LOG", payload: "toto", level: "log", key: 1 },
+          { type: "LOG", payload: "tata", level: "log", key: 2 },
+          { type: "LOG", payload: "titi", level: "log", key: 3 }
         ],
         { type: "LOG", payload: "tutu", level: "log" }
       )
     ).toEqual([
-      { type: "LOG", payload: "tata", level: "log" },
-      { type: "LOG", payload: "titi", level: "log" },
-      { type: "LOG", payload: "tutu", level: "log" }
+      { type: "LOG", payload: "tata", level: "log", key: 2 },
+      { type: "LOG", payload: "titi", level: "log", key: 3 },
+      { type: "LOG", payload: "tutu", level: "log", key: 4 }
     ]);
   });
 });

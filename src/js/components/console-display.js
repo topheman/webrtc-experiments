@@ -15,7 +15,10 @@ li {
   padding-left: 5px;
   white-space: nowrap;
 }
-li:nth-child(odd) {
+li.two {
+  background: #f1f1f1;
+}
+li.three {
   background: lightgray;
 }
 li.warn {
@@ -75,7 +78,9 @@ li.log::before {
     const ul = this.shadowRoot.querySelector("ul");
     const content = (this._data || [])
       .map(line => {
-        return `<li class="${line.level}">${
+        return `<li class="${line.level} ${
+          line.key % 3 === 1 ? "two" : line.key % 3 === 2 ? "three" : ""
+        }">${
           typeof line.payload === "object"
             ? JSON.stringify(line.payload)
             : line.payload

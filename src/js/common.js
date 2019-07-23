@@ -100,7 +100,12 @@ export function makeLogsReducer(bufferSize) {
   return (state = [], action = {}) => {
     switch (action.type) {
       case "LOG":
-        return state.concat(action).slice(-bufferSize);
+        return state
+          .concat({
+            ...action,
+            key: (state.slice(-1)[0] || { key: 0 }).key + 1
+          })
+          .slice(-bufferSize);
       default:
         return state;
     }
