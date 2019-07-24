@@ -21,6 +21,15 @@ li::before {
   font-weight: bold;
   font-size: 120%;
 }
+.animation-change {
+  animation-name: counter-change;
+  animation-duration: 0.5s;
+}
+@keyframes counter-change {
+  0%   {color: #900000;}
+  50%  {color: red;}
+  100%  {color: #900000;}
+}
     `;
     shadow.appendChild(style);
     shadow.appendChild(div);
@@ -77,7 +86,7 @@ li::before {
           }
           return `<li><span class="remote-peerId">${
             remote.peerId
-          }</span> counter: <span class="remote-counter">${
+          }</span> counter: <span class="remote-counter animation-change">${
             remote.counter
           }</span>${remote.name ? ` ${div.innerHTML}` : ""}</li>`;
         })
