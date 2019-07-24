@@ -4,6 +4,7 @@ import "./components/remotes-list.js";
 import "./components/qrcode-display.js";
 import "./components/errors-display.js";
 import "./components/console-display.js";
+import "./components/counter-display.js";
 
 export function createView(templateNode, staticContent, store) {
   const content = document.createElement("div");
@@ -21,7 +22,7 @@ export function createView(templateNode, staticContent, store) {
   const loader = content.querySelector(".initial-loading");
   const remotesList = content.querySelector("remotes-list");
   const errorsDisplay = content.querySelector("errors-display");
-  const globalCounter = content.querySelector(".global-counter");
+  const globalCounter = content.querySelector("counter-display.global-counter");
   const qrcodeDisplay = content.querySelector("qrcode-display");
   const buttonOpenRemote = content.querySelector(".open-remote");
   const consoleDisplay = content.querySelector("console-display");
@@ -41,7 +42,10 @@ export function createView(templateNode, staticContent, store) {
     }
     errorsDisplay.data = state.common.signalErrors;
     remotesList.data = state.main.remotes;
-    globalCounter.textContent = getGlobalCounterFromMainState(state.main);
+    globalCounter.setAttribute(
+      "data",
+      getGlobalCounterFromMainState(state.main)
+    );
     consoleDisplay.data = [...state.logs].reverse();
   });
   return content;

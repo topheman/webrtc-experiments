@@ -1,4 +1,4 @@
-class AnimatedCounter extends HTMLElement {
+class CounterDisplay extends HTMLElement {
   constructor() {
     super();
     const shadow = this.attachShadow({ mode: "open" });
@@ -36,4 +36,4 @@ span {
   }
 }
 
-customElements.define("animated-counter", AnimatedCounter);
+customElements.define("counter-display", CounterDisplay);
