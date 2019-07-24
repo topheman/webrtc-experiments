@@ -72,6 +72,8 @@ counter-display {
       content = `<p>${this._data.length} connected remote${
         this._data.length > 1 ? "s" : ""
       }:</p><ul>${this.data
+        .slice()
+        .sort((a, b) => (a.peerId > b.peerId ? 1 : -1))
         .map(remote => {
           if (remote.name) {
             div.textContent = remote.name;
