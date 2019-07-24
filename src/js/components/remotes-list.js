@@ -1,3 +1,5 @@
+import "./animated-counter.js";
+
 class RemotesList extends HTMLElement {
   constructor() {
     super();
@@ -16,19 +18,9 @@ li::before {
 .remote-peerId {
   font-size: 80%;
 }
-.remote-counter {
-  color: #900000;
+animated-counter {
   font-weight: bold;
   font-size: 120%;
-}
-.animation-change {
-  animation-name: counter-change;
-  animation-duration: 0.5s;
-}
-@keyframes counter-change {
-  0%   {color: #900000;}
-  50%  {color: red;}
-  100%  {color: #900000;}
 }
     `;
     shadow.appendChild(style);
@@ -86,9 +78,9 @@ li::before {
           }
           return `<li><span class="remote-peerId">${
             remote.peerId
-          }</span> counter: <span class="remote-counter animation-change">${
+          }</span> counter: <animated-counter data="${
             remote.counter
-          }</span>${remote.name ? ` ${div.innerHTML}` : ""}</li>`;
+          }"></animated-counter>${remote.name ? ` ${div.innerHTML}` : ""}</li>`;
         })
         .join("")}</ul>`;
     }
