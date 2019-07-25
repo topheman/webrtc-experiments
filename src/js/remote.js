@@ -7,75 +7,10 @@ import {
   makeLogger
 } from "./common.js";
 
-function makeButtonClickCallback(store, conn, actionType, logger) {
-  return function(e) {
-    e.preventDefault();
-    if (store.getState().main.masterConnected) {
-      logger.log(actionType);
-      conn.send({ type: actionType });
-    } else {
-      console.warn(`${actionType} not sent - connection closed`);
-    }
-  };
-}
-
-function makeFormSubmitCallback(store, conn, logger) {
-  return function(e) {
-    e.preventDefault();
-    if (store.getState().main.masterConnected) {
-      const action = {
-        type: "REMOTE_SET_NAME",
-        name: e.target.querySelector("input").value
-      };
-      store.dispatch(action);
-      conn.send(action);
-    } else {
-      logger.warn(`REMOTE_SET_NAME not sent - connection closed`);
-    }
-    setRemoteNameToLocalStorage(e.target.querySelector("input").value);
-  };
-}
-
-let incrementCallback, decrementCallback, formSubitCallback;
-function setupUI(store, conn, logger) {
-  document
-    .querySelector(".counter-control-add")
-    .removeEventListener("click", incrementCallback);
-  incrementCallback = makeButtonClickCallback(
-    store,
-    conn,
-    "COUNTER_INCREMENT",
-    logger
-  );
-  document
-    .querySelector(".counter-control-add")
-    .addEventListener("click", incrementCallback, false);
-  document
-    .querySelector(".counter-control-sub")
-    .removeEventListener("click", decrementCallback);
-  decrementCallback = makeButtonClickCallback(
-    store,
-    conn,
-    "COUNTER_DECREMENT",
-    logger
-  );
-  document
-    .querySelector(".counter-control-sub")
-    .addEventListener("click", decrementCallback, false);
-  document
-    .querySelector(".form-set-name")
-    .removeEventListener("submit", formSubitCallback, false);
-  formSubitCallback = makeFormSubmitCallback(store, conn, logger);
-  document
-    .querySelector(".form-set-name")
-    .addEventListener("submit", formSubitCallback, false);
-  document.querySelector(
-    ".form-set-name input"
-  ).value = getRemoteNameFromLocalStorage();
-}
+let conn = null;
 
 function makePeerConnection(peer, masterPeerId, store, logger) {
-  const conn = peer.connect(masterPeerId);
+  conn = peer.connect(masterPeerId);
   // send a disconnect message to master when reloading/closing
   const onBeforeUnload = () => {
     logger.info(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
@@ -93,7 +28,6 @@ function makePeerConnection(peer, masterPeerId, store, logger) {
       });
     }
     logger.info(`Data connection opened with ${masterPeerId}`, conn);
-    setupUI(store, conn, logger);
   });
   conn.on("data", data => {
     store.dispatch({ peerId: conn.peer, ...data });
@@ -133,6 +67,34 @@ function makePeerRemote(masterPeerId, store, logger) {
   return peer;
 }
 
+// expose callbacks for events to be attached to the view
+function makeUpdateRemoteNameCb(store, logger) {
+  return function(name) {
+    if (store.getState().main.masterConnected) {
+      const action = {
+        type: "REMOTE_SET_NAME",
+        name
+      };
+      store.dispatch(action);
+      conn.send(action);
+    } else {
+      logger.warn(`REMOTE_SET_NAME not sent - connection closed`);
+    }
+    setRemoteNameToLocalStorage(name);
+  };
+}
+
+function makeCounterActionCb(store, logger, actionType) {
+  return function() {
+    if (store.getState().main.masterConnected) {
+      logger.log(actionType);
+      conn.send({ type: actionType });
+    } else {
+      console.warn(`${actionType} not sent - connection closed`);
+    }
+  };
+}
+
 function init() {
   const store = makeStore();
   const logger = makeLogger(store);
@@ -142,7 +104,11 @@ function init() {
     true
   );
   const staticContent = document.querySelector(".static-content");
-  const content = createView(templateNode, staticContent, store);
+  const content = createView(templateNode, staticContent, store, {
+    updateRemoteName: makeUpdateRemoteNameCb(store, logger),
+    incrementCounter: makeCounterActionCb(store, logger, "COUNTER_INCREMENT"),
+    decrementCounter: makeCounterActionCb(store, logger, "COUNTER_DECREMENT")
+  });
   document.querySelector("#content").innerHTML = "";
   document.querySelector("#content").appendChild(content);
   // create peerjs controller
