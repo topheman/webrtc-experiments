@@ -1,4 +1,5 @@
 import { makeStore } from "./remote.store.js";
+import { createView } from "./remote.container.js";
 import {
   getPeerIdFromLacationHash,
   getRemoteNameFromLocalStorage,
@@ -135,6 +136,16 @@ function makePeerRemote(masterPeerId, store, logger) {
 function init() {
   const store = makeStore();
   const logger = makeLogger(store);
+  // create view based on <template> tag content
+  const templateNode = document.importNode(
+    document.querySelector("template").content,
+    true
+  );
+  const staticContent = document.querySelector(".static-content");
+  const content = createView(templateNode, staticContent, store);
+  document.querySelector("#content").innerHTML = "";
+  document.querySelector("#content").appendChild(content);
+  // create peerjs controller
   makePeerRemote(getPeerIdFromLacationHash(), store, logger);
 }
 

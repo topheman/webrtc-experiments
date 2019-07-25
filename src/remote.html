@@ -32,14 +32,32 @@
       </li>
     </ul>
     <h1 class="title">webrtc-experiments</h1>
-    <script src="./vendor/peerjs.min.js"></script>
-    <div class="counter-control">
-      <button type="button" class="counter-control-add">+</button>
-      <button type="button" class="counter-control-sub">-</button>
+    <div id="content">
+      <div class="initial-loading">
+        <span>Loading ...</span>
+      </div>
+      <div class="static-content">
+        <h2>Hello world!</h2>
+        <p>
+          Some explanations that would be directly available in html before
+          JavaScript starts rendering.
+        </p>
+      </div>
     </div>
-    <form class="form-set-name" action=".">
-      <input type="text" placeholder="Enter name" />
-    </form>
+    <template>
+      <div class="initial-loading">
+        <span>Loading ...</span>
+      </div>
+      <div class="counter-control">
+        <button type="button" class="counter-control-add">+</button>
+        <button type="button" class="counter-control-sub">-</button>
+      </div>
+      <form class="form-set-name" action=".">
+        <input type="text" placeholder="Enter name" />
+      </form>
+      <div class="static-content-wrapper"></div>
+    </template>
+    <script src="./vendor/peerjs.min.js"></script>
     <script src="./js/remote.js" type="module"></script>
   </body>
 </html>
