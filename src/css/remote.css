@@ -1,3 +1,7 @@
+body {
+  /* prevent zoom when double tap: https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action#Syntax */
+  touch-action: manipulation;
+}
 .counter-control {
   text-align: center;
 }
