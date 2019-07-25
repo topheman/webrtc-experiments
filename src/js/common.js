@@ -129,3 +129,17 @@ export const makeLogger = store => ({
     store.dispatch({ type: "LOG", level: "error", payload: msg });
   }
 });
+
+export const isLocalIp = ip => {
+  const regexps = [
+    /\b10\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/,
+    /\b172\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/,
+    /\b192\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/
+  ];
+  for (const regexp of regexps) {
+    if (regexp.test(ip) === true) {
+      return true;
+    }
+  }
+  return false;
+};

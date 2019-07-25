@@ -1,4 +1,9 @@
-import { commonReducer, humanizeErrors, makeLogsReducer } from "./common";
+import {
+  commonReducer,
+  humanizeErrors,
+  makeLogsReducer,
+  isLocalIp
+} from "./common";
 
 describe("common.commonReducer", () => {
   it("default state should be peerId: null, signalError: null", () => {
@@ -105,5 +110,22 @@ describe("common.makeLogsReducer", () => {
       { type: "LOG", payload: "titi", level: "log", key: 3 },
       { type: "LOG", payload: "tutu", level: "log", key: 4 }
     ]);
+  });
+});
+describe("common.isLocalIp", () => {
+  it("should return true for 10.0.0.0", () => {
+    expect(isLocalIp("10.0.0.0")).toBe(true);
+  });
+  it("should return true for 172.16.0.0", () => {
+    expect(isLocalIp("172.16.0.0")).toBe(true);
+  });
+  it("should return true for 192.168.0.0", () => {
+    expect(isLocalIp("192.168.0.0")).toBe(true);
+  });
+  it("should return false for 86.0.0.0", () => {
+    expect(isLocalIp("86.0.0.0")).toBe(false);
+  });
+  it("should return false for topheman.com", () => {
+    expect(isLocalIp("topheman.com")).toBe(false);
   });
 });

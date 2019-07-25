@@ -7,6 +7,11 @@ import {
   makeLogger
 } from "./common.js";
 
+export const isDisconnected = state =>
+  !state.common.peerId ||
+  state.common.signalErrors.length > 0 ||
+  !state.main.masterConnected;
+
 let conn = null;
 
 function makePeerConnection(peer, masterPeerId, store, logger) {
@@ -70,7 +75,7 @@ function makePeerRemote(masterPeerId, store, logger) {
 // expose callbacks for events to be attached to the view
 function makeUpdateRemoteNameCb(store, logger) {
   return function(name) {
-    if (store.getState().main.masterConnected) {
+    if (!isDisconnected(store.getState())) {
       const action = {
         type: "REMOTE_SET_NAME",
         name
@@ -86,7 +91,7 @@ function makeUpdateRemoteNameCb(store, logger) {
 
 function makeCounterActionCb(store, logger, actionType) {
   return function() {
-    if (store.getState().main.masterConnected) {
+    if (!isDisconnected(store.getState())) {
       logger.log(actionType);
       conn.send({ type: actionType });
     } else {
