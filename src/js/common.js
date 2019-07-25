@@ -23,12 +23,12 @@ export function getPeerIdFromLacationHash() {
 
 const REMOTE_NAME_LOCAL_STORAGE_KEY = "remote-name";
 
-export function getRemoteNameFromLocalStorage() {
-  return localStorage.getItem(REMOTE_NAME_LOCAL_STORAGE_KEY);
+export function getRemoteNameFromSessionStorage() {
+  return sessionStorage.getItem(REMOTE_NAME_LOCAL_STORAGE_KEY);
 }
 
-export function setRemoteNameToLocalStorage(remoteName) {
-  localStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
+export function setRemoteNameToSessionStorage(remoteName) {
+  sessionStorage.setItem(REMOTE_NAME_LOCAL_STORAGE_KEY, remoteName);
 }
 
 export function humanizeErrors(errors = []) {

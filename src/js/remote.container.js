@@ -1,8 +1,12 @@
+import { getRemoteNameFromSessionStorage } from "./common.js";
+
 export function createView(templateNode, staticContent, store, events) {
   const content = document.createElement("div");
   content.appendChild(templateNode);
   content.querySelector(".static-content-wrapper").appendChild(staticContent);
   const loader = content.querySelector(".initial-loading");
+  const formInput = content.querySelector(".form-set-name input");
+  formInput.value = getRemoteNameFromSessionStorage();
   // event delegation
   content.addEventListener(
     "click",

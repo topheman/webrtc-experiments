@@ -2,8 +2,8 @@ import { makeStore } from "./remote.store.js";
 import { createView } from "./remote.container.js";
 import {
   getPeerIdFromLacationHash,
-  getRemoteNameFromLocalStorage,
-  setRemoteNameToLocalStorage,
+  getRemoteNameFromSessionStorage,
+  setRemoteNameToSessionStorage,
   makeLogger
 } from "./common.js";
 
@@ -21,10 +21,10 @@ function makePeerConnection(peer, masterPeerId, store, logger) {
   window.addEventListener("beforeunload", onBeforeUnload);
   conn.on("open", () => {
     store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
-    if (getRemoteNameFromLocalStorage()) {
+    if (getRemoteNameFromSessionStorage()) {
       conn.send({
         type: "REMOTE_SET_NAME",
-        name: getRemoteNameFromLocalStorage()
+        name: getRemoteNameFromSessionStorage()
       });
     }
     logger.info(`Data connection opened with ${masterPeerId}`, conn);
@@ -80,7 +80,7 @@ function makeUpdateRemoteNameCb(store, logger) {
     } else {
       logger.warn(`REMOTE_SET_NAME not sent - connection closed`);
     }
-    setRemoteNameToLocalStorage(name);
+    setRemoteNameToSessionStorage(name);
   };
 }
 
