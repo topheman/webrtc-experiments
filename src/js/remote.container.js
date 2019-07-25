@@ -12,6 +12,7 @@ export function createView(templateNode, staticContent, store, events) {
   const formInput = content.querySelector(".form-set-name input");
   const buttons = content.querySelectorAll(".counter-control button");
   formInput.value = getRemoteNameFromSessionStorage();
+  const consoleDisplay = content.querySelector("console-display");
   // event delegation
   content.addEventListener(
     "click",
@@ -60,7 +61,7 @@ export function createView(templateNode, staticContent, store, events) {
         : "",
       ...state.common.signalErrors
     ].filter(Boolean);
-    console.log(errorsDisplay, errorsDisplay.data);
+    consoleDisplay.data = [...state.logs].reverse();
   });
   return content;
 }

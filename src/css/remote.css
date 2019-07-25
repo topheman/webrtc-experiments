@@ -6,3 +6,7 @@
   height: 100px;
   font-size: 300%;
 }
+console-display {
+  display: block;
+  margin-top: 20px;
+}
