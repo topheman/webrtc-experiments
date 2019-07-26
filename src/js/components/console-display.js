@@ -1,26 +1,9 @@
 class ConsoleDisplay extends HTMLElement {
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: "open" });
-    const style = document.createElement("style");
-    const ul = document.createElement("ul");
-    const div = document.createElement("div");
-    const header = document.createElement("span");
-    header.textContent = "Logs";
-    header.className = "header";
-    header.addEventListener(
-      "click",
-      () => {
-        const rootDivClassList = this.shadowRoot.querySelector("div").classList;
-        rootDivClassList.toggle("slidedown");
-        rootDivClassList.toggle("slideup");
-      },
-      false
-    );
-    div.className = "slidedown";
-    div.appendChild(header);
-    div.appendChild(ul);
-    style.textContent = `
+    const template = document.createElement("template");
+    template.innerHTML = `
+<style>
 :host {
   --border-color: grey;
 }
@@ -81,9 +64,23 @@ li.log::before {
 .slidedown ul {            
     max-height: 1000px ;                    
 }
+</style>
+<div class="slidedown">
+  <span class="header">Logs</span>
+  <ul></ul>
+</div>
     `;
-    shadow.appendChild(style);
-    shadow.appendChild(div);
+    const shadow = this.attachShadow({ mode: "open" });
+    shadow.appendChild(template.content.cloneNode(true));
+    shadow.querySelector(".header").addEventListener(
+      "click",
+      () => {
+        const rootDivClassList = this.shadowRoot.querySelector("div").classList;
+        rootDivClassList.toggle("slidedown");
+        rootDivClassList.toggle("slideup");
+      },
+      false
+    );
     this.render();
   }
 
