@@ -32,7 +32,7 @@ function makePeerConnection(peer, masterPeerId, store, logger) {
         name: getRemoteNameFromSessionStorage()
       });
     }
-    logger.info(`Data connection opened with ${masterPeerId}`, conn);
+    logger.info(`Data connection opened with master ${masterPeerId}`, conn);
   });
   conn.on("data", data => {
     store.dispatch({ peerId: conn.peer, ...data });

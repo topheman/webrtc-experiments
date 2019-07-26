@@ -25,7 +25,7 @@ function makePeerMaster(store, logger) {
   peer.on("connection", conn => {
     connections.push(conn);
     store.dispatch({ peerId: conn.peer, type: "REMOTE_CONNECT" });
-    logger.info(`Data connection opened with ${conn.peer}`);
+    logger.info(`Data connection opened with remote ${conn.peer}`);
     conn.on("data", data => {
       store.dispatch({ peerId: conn.peer, ...data });
     });
