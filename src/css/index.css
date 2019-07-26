@@ -4,7 +4,9 @@
   font-size: 120%;
 }
 qrcode-display {
-  text-align: center;
+  display: block;
+  width: 160px;
+  margin: 0 auto;
 }
 button.open-remote {
   width: 160px;

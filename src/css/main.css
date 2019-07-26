@@ -12,6 +12,9 @@ a,
 strong {
   color: #900000;
 }
+button {
+  -webkit-appearance: none;
+}
 
 .hide {
   display: none;

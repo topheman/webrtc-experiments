@@ -8,9 +8,17 @@ body {
 .counter-control button {
   width: 100px;
   height: 100px;
-  font-size: 300%;
+  font-size: 400%;
+  padding: 0;
 }
 console-display {
   display: block;
   margin-top: 20px;
+}
+.form-set-name input {
+  font-size: 150%;
+  text-align: center;
+  margin: 20px auto;
+  width: 220px;
+  display: block;
 }
