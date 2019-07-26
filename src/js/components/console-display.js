@@ -20,20 +20,22 @@ class ConsoleDisplay extends HTMLElement {
 .slidedown .header:after {
   content: " 🔼";
 }
+div.wrapper {
+  overflow-x: scroll;
+  border: 1px solid var(--border-color);
+}
 ul {
   list-style: none;
   padding-left: 0;
-  margin-top: 0;
+  margin: 0;
   width: 100%;
   overflow-x: scroll;
-  border-bottom: 1px solid var(--border-color);
+  display: table;
+  width: 100%;
 }
 li {
-  padding-left: 5px;
   white-space: nowrap;
-  border: 1px solid var(--border-color);
-  border-bottom: 0px;
-  border-top: 0px;
+  display: table-row;
 }
 li.two {
   background: #f1f1f1;
@@ -44,16 +46,19 @@ li.three {
 li.warn {
   background: lightyellow;
 }
+li::before {
+  margin-left: 8px;
+}
 li.info::before {
-  content: "ℹ️"
+  content: " ℹ️"
 }
 li.warn::before {
-  content: "⚠️"
+  content: " ⚠️"
 }
 li.log::before {
-  content: "📋"
+  content: " 📋"
 }
-.slideup ul, .slidedown ul {
+.slideup div, .slidedown div {
     max-height: 0;            
     overflow-y: hidden;
     -webkit-transition: max-height 0.5s ease-in-out;
@@ -61,13 +66,15 @@ li.log::before {
     -o-transition: max-height 0.5s ease-in-out;
     transition: max-height 0.5s ease-in-out;
 }
-.slidedown ul {            
+.slidedown div {            
     max-height: 1000px ;                    
 }
 </style>
 <div class="slidedown">
   <span class="header">Logs</span>
-  <ul></ul>
+  <div class="wrapper">
+    <ul></ul>
+  </div>
 </div>
     `;
     const shadow = this.attachShadow({ mode: "open" });
