@@ -11,4 +11,5 @@ qrcode-display {
 .open-remote {
   cursor: pointer;
   text-decoration: underline;
+  font-weight: bold;
 }
