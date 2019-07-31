@@ -2,6 +2,7 @@ import { getRemoteNameFromSessionStorage, isLocalIp } from "./common.js";
 import { isDisconnected } from "./remote.js";
 import "./components/errors-display.js";
 import "./components/console-display.js";
+import "./components/footer-display.js";
 
 export function createView(templateNode, staticContent, store, events) {
   const content = document.createElement("div");
@@ -13,6 +14,8 @@ export function createView(templateNode, staticContent, store, events) {
   const buttons = content.querySelectorAll(".counter-control button");
   formInput.value = getRemoteNameFromSessionStorage();
   const consoleDisplay = content.querySelector("console-display");
+  const footerDisplay = content.querySelector("footer-display");
+  footerDisplay.setAttribute("to", new Date().getFullYear());
   // event delegation
   content.addEventListener(
     "click",

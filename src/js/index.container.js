@@ -5,6 +5,7 @@ import "./components/qrcode-display.js";
 import "./components/errors-display.js";
 import "./components/console-display.js";
 import "./components/counter-display.js";
+import "./components/footer-display.js";
 
 export function createView(templateNode, staticContent, store) {
   const content = document.createElement("div");
@@ -26,6 +27,8 @@ export function createView(templateNode, staticContent, store) {
   const qrcodeDisplay = content.querySelector("qrcode-display");
   const buttonOpenRemote = content.querySelector(".open-remote");
   const consoleDisplay = content.querySelector("console-display");
+  const footerDisplay = content.querySelector("footer-display");
+  footerDisplay.setAttribute("to", new Date().getFullYear());
   store.subscribe(state => {
     if (state.common.peerId || state.common.signalErrors.length > 0) {
       loader.classList.add("hide");
