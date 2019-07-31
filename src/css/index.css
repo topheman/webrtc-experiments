@@ -8,11 +8,7 @@ qrcode-display {
   width: 160px;
   margin: 0 auto;
 }
-button.open-remote {
-  width: 160px;
-  height: 25px;
-  text-align: center;
-  margin: 0 auto;
-  display: block;
+.open-remote {
   cursor: pointer;
+  text-decoration: underline;
 }
