@@ -34,6 +34,14 @@ However, if you try to access the app from your local ip (like 192.168.1.1) from
 
 So to test on multiple devices, you'll need to tunnel the app with a utility like [localtunnel.me](https://localtunnel.me).
 
+I made an npm task that launches both the development server AND a localtunnel:
+
+```shell
+npm run dev
+```
+
+The public https temporary address will be outputted on your terminal (keep in mind you won't access your website through your local network but through the internet, which can take longer - use that only to test WebRTC on mobile devices).
+
 ## PeerJS
 
 [PeerJS](https://peerjs.com/) is a wrapper around the WebRTC browser's APIs. It provides a signaling server for free (which means you don't have to setup any backend server).
