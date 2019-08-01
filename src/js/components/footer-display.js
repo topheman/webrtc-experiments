@@ -1,3 +1,5 @@
+import "./twitter-button.js";
+
 class FooterDisplay extends HTMLElement {
   constructor() {
     super();
@@ -39,6 +41,9 @@ a {
     this.shadowRoot.querySelector("footer").innerHTML = `
 <p>
     ©${fromTo} - <a href="http://labs.topheman.com/">labs.topheman.com</a> - Christophe Rosset
+</p>
+<p>
+    <twitter-button text="An example of how you could use #WebRTC on the web, based on the #PeerJS library" url="https://topheman.github.io/webrtc-experiments" via="topheman"></twitter-button>
 </p>
     `;
   }
