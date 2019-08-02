@@ -1,7 +1,8 @@
 {
   "name": "webrtc-experiments",
   "version": "0.0.1",
-  "description": "",
+  "description": "An example of how you could use WebRTC on the web, based on the PeerJS library",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "start": "npm run serve",
@@ -11,7 +12,8 @@
     "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
     "test": "npx jest --no-cache --config jest.config.js",
     "localtunnel": "npx lt --port 5000",
-    "dev": "concurrently \"npm:serve\" \"npm:localtunnel\""
+    "dev": "concurrently \"npm:serve\" \"npm:localtunnel\"",
+    "deploy": "gh-pages -d src"
   },
   "lint-staged": {
     "**/*.{tsx,ts,js,jsx,json,css,scss,md}": [
@@ -29,6 +31,7 @@
   "devDependencies": {
     "concurrently": "^4.1.1",
     "esm": "3.1.0",
+    "gh-pages": "^2.1.0",
     "husky": "^1.3.1",
     "jest": "^24.8.0",
     "lint-staged": "^8.1.0",
