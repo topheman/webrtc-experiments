@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>webrtc-experiments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/network.css" />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+
+  <body>
+    <ul class="site-networks">
+      <li class="twitter">
+        <a href="https://twitter.com/topheman" title="@topheman on twitter">
+          <span class="icon"></span>
+          <span class="desc">Twitter</span>
+        </a>
+      </li>
+      <li class="github">
+        <a
+          href="https://github.com/topheman/webrtc-experiments"
+          title="topheman on github"
+        >
+          <span class="icon"></span>
+          <span class="desc">Github</span>
+        </a>
+      </li>
+    </ul>
+    <h1 class="title">webrtc-experiments</h1>
+    <div id="content">
+      <div class="initial-loading">
+        <span>Loading ...</span>
+      </div>
+      <div class="static-content">
+        <!-- Add static content if necessary -->
+      </div>
+    </div>
+    <template>
+      <div class="initial-loading">
+        <span>Loading ...</span>
+      </div>
+      <errors-display></errors-display>
+      <qrcode-display width="160" height="160"></qrcode-display>
+      <p>
+        👆Snap the the QR code or <span class="open-remote">click here</span> to
+        open an
+        <strong>other window from where you will control the counters</strong>
+        on this page (like with a remote).
+      </p>
+      <p>
+        Global counter:
+        <counter-display data="0" class="global-counter"></counter-display>
+      </p>
+      <remotes-list></remotes-list>
+      <console-display></console-display>
+      <div class="static-content-wrapper"></div>
+      <footer-display from="2019"></footer-display>
+    </template>
+    <script src="./vendor/qrcode.min.js"></script>
+    <script src="./vendor/peerjs.min.js"></script>
+    <script src="./js/index.js" type="module"></script>
+  </body>
+</html>
