@@ -11,6 +11,8 @@
     "test:precommit": "npm test",
     "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
     "test": "npx jest --no-cache --config jest.config.js",
+    "test:travis": "npm test",
+    "test:travis:pr": "npm test",
     "localtunnel": "npx lt --port 5000",
     "dev": "concurrently \"npm:serve\" \"npm:localtunnel\"",
     "deploy": "gh-pages -d src"

@@ -1,0 +1,7 @@
+sudo: false
+language: node_js
+node_js:
+  - "10"
+install: yarn
+script:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && npm run test:travis || npm run test:travis:pr'
