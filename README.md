@@ -1,5 +1,7 @@
 # webrtc-experiments
 
+[![Demo](https://img.shields.io/badge/demo-online-blue.svg)](https://topheman.github.io/webrtc-experiments/)
+
 The goal of this project is to expose an example of WebRTC, using the PeerJS library, that goes beyond the usual exercises but still keeping it clear.
 
 Go to the demo, snap the QR code, you'll update the counter in real-time (thanks to WebRTC).
