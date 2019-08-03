@@ -1,12 +1,13 @@
 # webrtc-experiments
 
+[![Build Status](https://travis-ci.org/topheman/webrtc-experiments.svg?branch=master)](https://travis-ci.org/topheman/webrtc-experiments)
 [![Demo](https://img.shields.io/badge/demo-online-blue.svg)](https://topheman.github.io/webrtc-experiments/)
 
 The goal of this project is to expose an example of WebRTC, using the PeerJS library, that goes beyond the usual exercises but still keeping it clear.
 
 Go to the demo, snap the QR code, you'll update the counter in real-time (thanks to WebRTC).
 
-This was developed without any bundler (no Webpack), nor Framework (based on web component and a light implementation of redux), there are still unit tests - VanillaJS FTW 🤟
+This was developed without any bundler/transpiler (no Webpack/Babel), nor Framework (based on web component and a light implementation of redux), there are still unit tests - VanillaJS FTW 🤟
 
 ## Install
 
@@ -27,6 +28,8 @@ npm start
 ```shell
 npm test
 ```
+
+Currently, I'm using babel-jest, since using jest with esm is failing - [read more about the jest setup](NOTES.md)
 
 ## https
 
@@ -56,6 +59,10 @@ Thanks to PeerJS, you don't have to bother directly about:
 
 > ICE stands for Interactive Connectivity Establishment , its a techniques used in NAT( network address translator ) for establishing communication for VOIP, peer-peer, instant-messaging, and other kind of interactive media.
 > Typically ice candidate provides the information about the ipaddress and port from where the data is going to be exchanged.
+
+## Notes
+
+- [Read about Jest setup (problems encountered because not using any transpiler)](NOTES.md)
 
 ## Resources
 
