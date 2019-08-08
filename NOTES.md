@@ -2,9 +2,21 @@
 
 ## Jest unit test setup
 
+A minimal reproducible bug is available at [topheman/jest-esm-experiments](https://github.com/topheman/jest-esm-experiments).
+
 In the last few years, you must have been using ES6+ features of the JavaScript language on your projects. Tools like Babel and Webpack have made this possible and are now mainstream thanks to toolkits like Create React App.
 
 This project doesn't rely on transpilation or bundler (no Babel, no Webpack), it uses directly the latest APIs of the browsers.
+
+### Prerequisite
+
+Due to the following error:
+
+```
+TypeError: Jest: a transform must export a `process` function.
+```
+
+**Downgrading to esm@3.1.0** - [source](https://github.com/kenotron/esm-jest/issues/5#issuecomment-503016224)
 
 ### BUT ...
 
