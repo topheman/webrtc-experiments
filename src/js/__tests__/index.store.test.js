@@ -1,4 +1,4 @@
-import { mainReducer, makeRemoteCounterMainState } from "./index.store";
+import { mainReducer, makeRemoteCounterMainState } from "../index.store";
 
 describe("index.store.mainReducer", () => {
   it("Create a new slice of state from peerId", () => {

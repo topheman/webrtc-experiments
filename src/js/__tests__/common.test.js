@@ -3,7 +3,7 @@ import {
   humanizeErrors,
   makeLogsReducer,
   isLocalIp
-} from "./common";
+} from "../common";
 
 describe("common.commonReducer", () => {
   it("default state should be peerId: null, signalError: null", () => {

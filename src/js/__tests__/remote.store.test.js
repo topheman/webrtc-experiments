@@ -1,4 +1,4 @@
-import { mainReducer } from "./remote.store";
+import { mainReducer } from "../remote.store";
 
 describe("remote.store.mainReducer", () => {
   it("state should turn to masterConnected === true on MASTER_CONNECT", () => {
