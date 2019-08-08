@@ -29,7 +29,12 @@ npm start
 npm test
 ```
 
-Currently, I'm using babel-jest, since using jest with esm is failing - [read more about the jest setup](NOTES.md)
+Will launch:
+
+- `npm run test:unit:babel`: any `src/**/*.(spec|test).js` file run with babel-jest ([can't make esm work with jest](NOTES.md), so I'm transpiling for the tests)
+- `npm run test:wc`: any `src/**/*.spec.browser.js` file with karma/jasmine (to test WebComponents, we need a real browser - not just jsdom which isn't there yet with the reimplementation of the WebComponents spec)
+
+All unit tests could be refactored into only using karma and dropping jest in the future.
 
 ## https
 
