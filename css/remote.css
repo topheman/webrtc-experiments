@@ -49,5 +49,3 @@ console-display {
 .form-set-name label button:disabled {
   color: #ffc2c2;
 }
-button[:disabled] {
-}
