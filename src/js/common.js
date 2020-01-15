@@ -143,3 +143,37 @@ export const isLocalIp = ip => {
   }
   return false;
 };
+
+/**
+ * Safari supports only string data when sending via DataConnection.
+ * Use JSON serialization type if you want to communicate with Safari.
+ * By default, DataConnection uses Binary serialization type.
+ * https://github.com/peers/peerjs#safari
+ */
+export function useEncodePayload(userAgent = "safari") {
+  console.warn("Inject userAgent");
+  if (!/safari/i.test(userAgent)) {
+    return {
+      encodePayload: payload => payload,
+      decodePayload: payload => payload
+    };
+  }
+  return {
+    encodePayload: payload => {
+      try {
+        console.log("toEncode", payload);
+        return JSON.stringify(payload);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    decodePayload: payload => {
+      try {
+        console.log("toDecode", payload);
+        return JSON.parse(payload);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+}

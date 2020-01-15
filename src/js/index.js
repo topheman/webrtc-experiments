@@ -1,12 +1,14 @@
 import {
   getMasterPeerIdFromLocalStorage,
   setMasterPeerIdToLocalStorage,
-  makeLogger
+  makeLogger,
+  useEncodePayload
 } from "./common.js";
 import { makeStore } from "./index.store.js";
 import { createView } from "./index.container.js";
 
 function makePeerMaster(store, logger) {
+  const { encodePayload, decodePayload } = useEncodePayload();
   const peer = new Peer(getMasterPeerIdFromLocalStorage());
   const connections = [];
   // send a disconnect message to all clients when reloading/closing
@@ -14,7 +16,7 @@ function makePeerMaster(store, logger) {
     console.log("disconnecting", connections);
     connections.forEach(conn => {
       logger.info(`Sending "MASTER_DISCONNECT" to ${conn.peer}`);
-      conn.send({ type: "MASTER_DISCONNECT" });
+      conn.send(encodePayload({ type: "MASTER_DISCONNECT" }));
     });
   });
   peer.on("open", peerId => {
@@ -27,7 +29,7 @@ function makePeerMaster(store, logger) {
     store.dispatch({ peerId: conn.peer, type: "REMOTE_CONNECT" });
     logger.info(`Data connection opened with remote ${conn.peer}`);
     conn.on("data", data => {
-      store.dispatch({ peerId: conn.peer, ...data });
+      store.dispatch({ peerId: conn.peer, ...decodePayload(data) });
     });
   });
   peer.on("error", error => {

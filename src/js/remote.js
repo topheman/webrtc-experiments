@@ -4,7 +4,8 @@ import {
   getPeerIdFromLacationHash,
   getRemoteNameFromSessionStorage,
   setRemoteNameToSessionStorage,
-  makeLogger
+  makeLogger,
+  useEncodePayload
 } from "./common.js";
 
 export const isDisconnected = state =>
@@ -15,11 +16,12 @@ export const isDisconnected = state =>
 let conn = null;
 
 function makePeerConnection(peer, masterPeerId, store, logger) {
+  const { encodePayload, decodePayload } = useEncodePayload();
   conn = peer.connect(masterPeerId);
   // send a disconnect message to master when reloading/closing
   const onBeforeUnload = () => {
     logger.info(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
-    conn.send({ type: "REMOTE_DISCONNECT" });
+    conn.send(encodePayload({ type: "REMOTE_DISCONNECT" }));
   };
   // make sure to remove a previous added event to prevent double trigger
   window.removeEventListener("beforeunload", onBeforeUnload);
@@ -27,15 +29,17 @@ function makePeerConnection(peer, masterPeerId, store, logger) {
   conn.on("open", () => {
     store.dispatch({ peerId: conn.peer, type: "MASTER_CONNECT" });
     if (getRemoteNameFromSessionStorage()) {
-      conn.send({
-        type: "REMOTE_SET_NAME",
-        name: getRemoteNameFromSessionStorage()
-      });
+      conn.send(
+        encodePayload({
+          type: "REMOTE_SET_NAME",
+          name: getRemoteNameFromSessionStorage()
+        })
+      );
     }
     logger.info(`Data connection opened with master ${masterPeerId}`, conn);
   });
   conn.on("data", data => {
-    store.dispatch({ peerId: conn.peer, ...data });
+    store.dispatch({ peerId: conn.peer, ...decodePayload(data) });
   });
   return conn;
 }
@@ -74,6 +78,7 @@ function makePeerRemote(masterPeerId, store, logger) {
 
 // expose callbacks for events to be attached to the view
 function makeUpdateRemoteNameCb(store, logger) {
+  const { encodePayload } = useEncodePayload();
   return function(name) {
     if (!isDisconnected(store.getState())) {
       const action = {
@@ -81,7 +86,7 @@ function makeUpdateRemoteNameCb(store, logger) {
         name
       };
       store.dispatch(action);
-      conn.send(action);
+      conn.send(encodePayload(action));
     } else {
       logger.warn(`REMOTE_SET_NAME not sent - connection closed`);
     }
@@ -90,10 +95,11 @@ function makeUpdateRemoteNameCb(store, logger) {
 }
 
 function makeCounterActionCb(store, logger, actionType) {
+  const { encodePayload } = useEncodePayload();
   return function() {
     if (!isDisconnected(store.getState())) {
       logger.log(actionType);
-      conn.send({ type: actionType });
+      conn.send(encodePayload({ type: actionType }));
     } else {
       console.warn(`${actionType} not sent - connection closed`);
     }
