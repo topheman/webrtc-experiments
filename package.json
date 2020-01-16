@@ -17,8 +17,8 @@
     "test:wc:watch": "karma start karma.config.js",
     "test:travis": "npm test",
     "test:travis:pr": "npm test",
-    "localtunnel": "npx lt --port 5000",
-    "dev": "concurrently \"npm:serve\" \"npm:localtunnel\"",
+    "forward": "ssh -R 80:localhost:5000 localhost.run",
+    "dev": "concurrently \"npm:serve\" \"npm:forward\"",
     "deploy": "gh-pages -d src"
   },
   "lint-staged": {
@@ -48,7 +48,6 @@
     "karma-chrome-launcher": "^3.0.0",
     "karma-jasmine": "^2.0.1",
     "lint-staged": "^8.1.0",
-    "localtunnel": "^1.9.2",
     "prettier": "1.18.2",
     "serve": "^11.1.0"
   }
