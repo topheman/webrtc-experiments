@@ -42,9 +42,9 @@ WebRTC only works on secure origins (localhost is considered secure). The app wi
 
 However, if you try to access the app from your local ip (like 192.168.1.1) from your laptop and your mobile, it won't work, since the domain will be recognized as unsecure.
 
-So to test on multiple devices, you'll need to tunnel the app with a utility like [localtunnel.me](https://localtunnel.me).
+So to test on multiple devices, you'll need to tunnel the app with a utility like [localhost.run](https://localhost.run/).
 
-I made an npm task that launches both the development server AND a localtunnel:
+I made an npm task that launches both the development server AND exposes the app in on a public, temporary domain, on https:
 
 ```shell
 npm run dev
