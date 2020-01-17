@@ -17,7 +17,7 @@
     "test:wc:watch": "karma start karma.config.js",
     "test:travis": "npm test",
     "test:travis:pr": "npm test",
-    "forward": "ssh -R 80:localhost:5000 localhost.run",
+    "forward": "ssh -R 80:localhost:5000 localhost.run -l webrtc",
     "dev": "concurrently \"npm:serve\" \"npm:forward\"",
     "deploy": "gh-pages -d src"
   },
