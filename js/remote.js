@@ -15,7 +15,8 @@ export const isDisconnected = state =>
 let conn = null;
 
 function makePeerConnection(peer, masterPeerId, store, logger) {
-  conn = peer.connect(masterPeerId);
+  // to ensure connections with iOs, must use json serialization
+  conn = peer.connect(masterPeerId, { serialization: "json" });
   // send a disconnect message to master when reloading/closing
   const onBeforeUnload = () => {
     logger.info(`Sending "REMOTE_DISCONNECT" to ${conn.peer}`);
