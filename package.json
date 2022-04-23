@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run serve",
-    "serve": "npx serve src -l 5000",
+    "serve": "npx serve src -l 3000",
     "lint:precommit": "echo \"No precommit linting yet\" && exit 0",
     "test:precommit": "npm test",
     "pretty": "npx prettier --write '**/*.{tsx,ts,js,jsx,json,css,scss,md}'",
@@ -17,7 +17,7 @@
     "test:wc:watch": "karma start karma.config.js",
     "test:travis": "npm test",
     "test:travis:pr": "npm test",
-    "forward": "ssh -R 80:localhost:5000 localhost.run -l webrtc",
+    "forward": "ssh -R 80:localhost:3000 localhost.run -l webrtc",
     "dev": "concurrently \"npm:serve\" \"npm:forward\"",
     "deploy": "gh-pages -d src"
   },
