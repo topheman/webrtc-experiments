@@ -1,5 +1,6 @@
 import { makeStore } from "./remote.store.js";
 import { createView } from "./remote.container.js";
+import { getPeerjsConfig } from "./peer-config.js";
 import {
   getPeerIdFromLacationHash,
   getRemoteNameFromSessionStorage,
@@ -42,7 +43,7 @@ function makePeerConnection(peer, masterPeerId, store, logger) {
 }
 
 function makePeerRemote(masterPeerId, store, logger) {
-  const peer = new Peer();
+  const peer = new Peer(undefined, getPeerjsConfig());
   peer.on("open", peerId => {
     logger.info(`Peer object created, ${JSON.stringify({ peerId })}`);
     store.dispatch({ type: "SIGNAL_OPEN", peerId });
