@@ -3,11 +3,12 @@ import {
   setMasterPeerIdToLocalStorage,
   makeLogger
 } from "./common.js";
+import { getPeerjsConfig } from "./peer-config.js";
 import { makeStore } from "./index.store.js";
 import { createView } from "./index.container.js";
 
 function makePeerMaster(store, logger) {
-  const peer = new Peer(getMasterPeerIdFromLocalStorage());
+  const peer = new Peer(getMasterPeerIdFromLocalStorage(), getPeerjsConfig());
   const connections = [];
   // send a disconnect message to all clients when reloading/closing
   window.addEventListener("beforeunload", () => {
